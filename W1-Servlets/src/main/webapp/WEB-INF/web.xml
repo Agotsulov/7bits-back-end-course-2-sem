@@ -1,11 +1,19 @@
 <?xml version="1.0"?>
 <web-app>
     <servlet>
-        <servlet-name>simpleServlet</servlet-name>
-        <servlet-class>it.sevenbits.servlet.RootServlet</servlet-class>
+        <servlet-name>taskServlet</servlet-name>
+        <servlet-class>it.sevenbits.servlet.TaskServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>tasksServlet</servlet-name>
+        <servlet-class>it.sevenbits.servlet.TasksServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>simpleServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>taskServlet</servlet-name>
+        <url-pattern>/task/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>tasksServlet</servlet-name>
+        <url-pattern>/tasks/</url-pattern>
     </servlet-mapping>
 </web-app>

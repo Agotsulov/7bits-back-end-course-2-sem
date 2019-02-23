@@ -11,28 +11,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.UUID;
 
-public class RootServlet extends HttpServlet {
+public class TasksServlet extends HttpServlet {
 
     private TaskRepository taskRepository;
 
-    public RootServlet() {
+    public TasksServlet() {
         this.taskRepository = TaskRepository.getInstance();
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request,
-                         final HttpServletResponse response)
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
-        System.out.println("GET");
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(taskRepository.getTasks());
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        resp.getWriter().write(taskRepository.getTasks());
     }
 
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
-        System.out.println("POST");
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -46,4 +44,7 @@ public class RootServlet extends HttpServlet {
         System.out.println(req.getParameter("key"));
 
     }
+
+
+
 }

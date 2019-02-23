@@ -29,14 +29,18 @@ public class TaskRepository {
         return tasks.get(id);
     }
 
+    public void removeTask(final UUID id) {
+        tasks.remove(id);
+    }
+
     public String getTasks() {
         StringBuilder result = new StringBuilder();
         result.append("[\n");
         for (UUID id: tasks.keySet()) {
             result.append("{\n" +
-                    "\"id:\"" + id +
-                    "\"name\"" + tasks.get(id) +
-                    "}\n");
+                    "id:\"" + id + "\"" +
+                    "name:\"" + tasks.get(id) + "\"" +
+                    "},\n");
         }
         result.append("]");
         return result.toString();
