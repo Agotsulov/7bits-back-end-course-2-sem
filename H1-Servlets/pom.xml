@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.sevenbits</groupId>
-    <artifactId>w1servlets</artifactId>
+    <artifactId>H1-Servlets</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
-    <name>w1</name>
+    <name>h1</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -23,7 +23,10 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
     </dependencies>
-
-
 </project>
