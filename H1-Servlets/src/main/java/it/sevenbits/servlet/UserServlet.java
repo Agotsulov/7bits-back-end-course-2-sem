@@ -33,7 +33,7 @@ public class UserServlet extends HttpServlet {
 
         if (id != null) {
             resp.setStatus(200);
-            resp.getWriter().write("Current User is " + userRepository.getTask(UUID.fromString(id)));
+            resp.getWriter().write("Current User is " + userRepository.get(UUID.fromString(id)));
         } else {
             resp.setStatus(404);
         }
@@ -50,7 +50,7 @@ public class UserServlet extends HttpServlet {
             resp.setStatus(404);
         } else {
             resp.setStatus(200);
-            UUID id = userRepository.addTask(name);
+            UUID id = userRepository.add(name);
             resp.getWriter().write("Успех");
             resp.addCookie(new Cookie("id",  id.toString()));
         }

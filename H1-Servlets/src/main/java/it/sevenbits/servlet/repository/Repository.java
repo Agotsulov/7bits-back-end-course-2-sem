@@ -1,7 +1,6 @@
 package it.sevenbits.servlet.repository;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +9,10 @@ public class Repository {
 
     private static ConcurrentHashMap<String, Repository> instances = new ConcurrentHashMap<>();
 
-    private ConcurrentHashMap<UUID, String> tasks;
+    private ConcurrentHashMap<UUID, String> map;
 
     private Repository() {
-        tasks = new ConcurrentHashMap<>();
+        map = new ConcurrentHashMap<>();
     }
 
     public static Repository getInstance(final String name) {
@@ -25,21 +24,21 @@ public class Repository {
         return instance;
     }
 
-    public UUID addTask(final String task) {
+    public UUID add(final String task) {
         UUID id = UUID.randomUUID();
-        tasks.put(id, task);
+        map.put(id, task);
         return id;
     }
 
-    public String getTask(final UUID id) {
-        return tasks.get(id);
+    public String get(final UUID id) {
+        return map.get(id);
     }
 
-    public void removeTask(final UUID id) {
-        tasks.remove(id);
+    public void remove(final UUID id) {
+        map.remove(id);
     }
 
-    public String getTasks() {
-        return new Gson().toJson(tasks);
+    public String toJson() {
+        return new Gson().toJson(map);
     }
 }

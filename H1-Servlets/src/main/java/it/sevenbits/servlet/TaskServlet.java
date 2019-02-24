@@ -16,7 +16,7 @@ public class TaskServlet extends HttpServlet {
 
     public TaskServlet() {
         this.taskRepository = Repository.getInstance("Tasks");
-        this.userRepository = Repository.getInstance("User");
+        this.userRepository = Repository.getInstance("Users");
     }
 
     @Override
@@ -24,34 +24,62 @@ public class TaskServlet extends HttpServlet {
             throws ServletException, IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-
+        //Делаем максимально просто
         String auth = req.getHeader("Authorization");
-        if (auth == null) {
-            resp.setStatus(401);
-            return;
-        }
 
+        try {
+            if (auth == null) {
+                resp.setStatus(401);
+                return;
+            }
 
-        String s = req.getQueryString().split("=")[1];
-        if (s == null) {
+            if (userRepository.get(UUID.fromString(auth)) == null) {
+                resp.setStatus(403);
+                return;
+            }
+
+            String s = req.getQueryString().split("=")[1];
+            if (s == null) {
+                resp.setStatus(404);
+            } else {
+                resp.setStatus(200);
+                resp.getWriter().write(taskRepository.get(UUID.fromString(s)));
+            }
+        } catch (Exception e) {
             resp.setStatus(404);
         }
-        resp.getWriter().write(taskRepository.getTask(UUID.fromString(s)));
 
     }
 
     @Override
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
-        resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        //Делаем максимально просто
 
-        String s = req.getQueryString().split("=")[1];
-        if (s != null) {
-            taskRepository.removeTask((UUID.fromString(s)));
-            resp.getWriter().write(s);
-        } else {
-            resp.getWriter().write("\"Task not found\"");
+        String auth = req.getHeader("Authorization");
+
+        try {
+            if (auth == null) {
+                resp.setStatus(401);
+                return;
+            }
+            if (userRepository.get(UUID.fromString(auth)) == null) {
+                resp.setStatus(403);
+                return;
+            }
+
+            String s = req.getQueryString().split("=")[1];
+            if (s == null) {
+                resp.setStatus(404);
+            } else {
+                resp.setStatus(200);
+                UUID id = UUID.fromString(s);
+                resp.getWriter().write("Delete :" + taskRepository.get(id));
+                taskRepository.remove(id);
+            }
+        } catch (Exception e) {
+            resp.setStatus(404);
         }
     }
 }

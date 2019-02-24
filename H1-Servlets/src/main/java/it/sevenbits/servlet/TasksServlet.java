@@ -13,9 +13,11 @@ import java.util.UUID;
 public class TasksServlet extends HttpServlet {
 
     private Repository taskRepository;
+    private Repository userRepository;
 
     public TasksServlet() {
         this.taskRepository = Repository.getInstance("Tasks");
+        this.userRepository = Repository.getInstance("Users");
     }
 
     @Override
@@ -23,8 +25,26 @@ public class TasksServlet extends HttpServlet {
             throws ServletException, IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        //Делаем максимально просто
 
-        resp.getWriter().write(taskRepository.getTasks());
+        String auth = req.getHeader("Authorization");
+        try {
+            if (auth == null) {
+                resp.setStatus(401);
+                return;
+            }
+
+            if (userRepository.get(UUID.fromString(auth)) == null) {
+                resp.setStatus(403);
+                return;
+            }
+
+            resp.getWriter().write(taskRepository.toJson());
+            resp.setStatus(200);
+        } catch (Exception e) {
+            resp.setStatus(404);
+        }
+
     }
 
     @Override
@@ -32,15 +52,33 @@ public class TasksServlet extends HttpServlet {
             throws ServletException, IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        //Делаем максимально просто
 
-        String s = req.getParameter("key");
-        if (s == null) {
-            resp.getWriter().write("KEY NOT FOUND");
-        } else {
-            UUID id = taskRepository.addTask(s);
-            resp.getWriter().write(taskRepository.getTask(id));
+        String auth = req.getHeader("Authorization");
+        try {
+            if (auth == null) {
+                resp.setStatus(401);
+                return;
+            }
+
+            if (userRepository.get(UUID.fromString(auth)) == null) {
+                resp.setStatus(403);
+                return;
+            }
+
+            String s = req.getParameter("key");
+            if (s == null) {
+                resp.setStatus(404);
+            } else {
+                UUID id = taskRepository.add(s);
+                resp.getWriter().write(taskRepository.get(id));
+                resp.setStatus(200);
+            }
+
+        } catch (Exception e) {
+            resp.setStatus(404);
         }
-        System.out.println(req.getParameter("key"));
+
 
     }
 }
