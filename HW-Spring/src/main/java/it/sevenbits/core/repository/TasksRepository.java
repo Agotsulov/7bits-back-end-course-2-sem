@@ -1,6 +1,6 @@
-package it.sevenbits.repository;
+package it.sevenbits.core.repository;
 
-import it.sevenbits.model.Task;
+import it.sevenbits.core.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;

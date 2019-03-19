@@ -1,6 +1,6 @@
 package it.sevenbits.config;
 
-import it.sevenbits.repository.TasksRepository;
+import it.sevenbits.core.repository.TasksRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

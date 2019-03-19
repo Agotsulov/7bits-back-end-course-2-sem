@@ -1,9 +1,9 @@
-package it.sevenbits.contorller;
+package it.sevenbits.web.contorller;
 
-import it.sevenbits.model.AddTaskRequest;
-import it.sevenbits.model.PatchTaskRequest;
-import it.sevenbits.model.Task;
-import it.sevenbits.repository.TasksRepository;
+import it.sevenbits.web.model.AddTaskRequest;
+import it.sevenbits.web.model.PatchTaskRequest;
+import it.sevenbits.core.model.Task;
+import it.sevenbits.core.repository.TasksRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
