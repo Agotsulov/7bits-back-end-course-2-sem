@@ -32,7 +32,7 @@ public class TasksController {
     public ResponseEntity<Task> create(@RequestBody Task newTask) {
         UUID id = UUID.randomUUID();
         Task task = tasksRepository.put(id, newTask);
-        URI location = UriComponentsBuilder.fromPath("/items/")
+        URI location = UriComponentsBuilder.fromPath("/users/")
                 .path(String.valueOf(id.toString()))
                 .build().toUri();
         return ResponseEntity.created(location).body(task);
