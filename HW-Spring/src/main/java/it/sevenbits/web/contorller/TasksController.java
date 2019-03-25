@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Controller
@@ -36,10 +39,15 @@ public class TasksController {
             return ResponseEntity.badRequest().build();
         }
         UUID id = UUID.randomUUID();
+
+        final SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        final String utcTime = sdf.format(new Date());
         Task task = tasksRepository.put(id,
                 new Task(id.toString(),
                         newTask.getText(),
-                        "inbox")
+                        "inbox",
+                        utcTime)
         );
         URI location = UriComponentsBuilder.fromPath("/users/")
                 .path(String.valueOf(id.toString()))
