@@ -3,6 +3,9 @@ package it.sevenbits.core.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class Task {
@@ -22,6 +25,22 @@ public class Task {
         this.id = UUID.fromString(id);
         this.text = text;
         this.status = status;
+        this.createAt = createAt;
+    }
+
+
+    // Это норм? Или лучше отдельной статической функцией сделать
+    public Task(final String text) {
+        UUID id = UUID.randomUUID();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+
+        date.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        String createAt = date.format(new Date());
+
+        this.id = id;
+        this.text = text;
+        this.status = "inbox";
         this.createAt = createAt;
     }
 
