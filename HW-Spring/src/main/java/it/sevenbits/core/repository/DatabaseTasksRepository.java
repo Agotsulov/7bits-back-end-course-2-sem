@@ -16,7 +16,7 @@ public class DatabaseTasksRepository implements Repository{
     private JdbcOperations jdbcOperations;
     private final TaskRowMapper taskRowMapper = new TaskRowMapper();
 
-    public DatabaseTasksRepository(JdbcOperations jdbcOperations) {
+    public DatabaseTasksRepository(final JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
 

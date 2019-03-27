@@ -19,7 +19,7 @@ import java.util.UUID;
 public class TasksController {
     private final Repository tasksRepository;
 
-    public TasksController(Repository tasksRepository){
+    public TasksController(final Repository tasksRepository){
         this.tasksRepository = tasksRepository;
     }
 
@@ -49,10 +49,12 @@ public class TasksController {
 
         Task task = tasksRepository.create(newTask);
 
+        /*
         URI location = UriComponentsBuilder.fromPath("/users/")
-                .path(String.valueOf(task.getId().toString()))
-                .build().toUri();
-        return ResponseEntity.created(location).body(task);
+                    .path(String.valueOf(task.getId().toString()))
+                    .build().toUri();
+        */
+        return ResponseEntity.ok().body(task);
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "{id}")
