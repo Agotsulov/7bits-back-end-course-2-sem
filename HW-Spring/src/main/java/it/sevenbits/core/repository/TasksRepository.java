@@ -1,6 +1,8 @@
 package it.sevenbits.core.repository;
 
 import it.sevenbits.core.model.Task;
+import it.sevenbits.core.other.Helper;
+import it.sevenbits.core.other.TaskFactory;
 import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.PatchTaskRequest;
 
@@ -18,7 +20,7 @@ public class TasksRepository implements Repository{
 
     @Override
     public Task create(final AddTaskRequest newTask) {
-        Task task = new Task(newTask.getText());
+        Task task = TaskFactory.createTaskByText(newTask.getText());
         map.put(task.getId(), task);
         return task;
     }
@@ -47,6 +49,7 @@ public class TasksRepository implements Repository{
     public Task update(final UUID id, final PatchTaskRequest newTask) {
         Task task = get(id);
         task.setStatus(newTask.getStatus());
+        task.setUpdateAt(Helper.getCurrentTime());
         return task;
     }
 }

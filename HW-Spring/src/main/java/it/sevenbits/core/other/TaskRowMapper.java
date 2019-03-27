@@ -8,13 +8,14 @@ import java.sql.SQLException;
 
 public class TaskRowMapper implements RowMapper<Task>{
 
-    //Хз как пакет назвать. Это вообще нужно что код не дублировать и ламбду тут не написать
+    //Хз как пакет назвать. Это чтобы код не дублировать, а ламбду тут не написать
     @Override
     public Task mapRow(ResultSet resultSet, int i) throws SQLException {
         String id = resultSet.getString(1);
         String name = resultSet.getString(2);
         String status = resultSet.getString(3);
         String createAt = resultSet.getString(4);
-        return new Task(id, name, status, createAt);
+        String updateAt = resultSet.getString(5);
+        return new Task(id, name, status, createAt, updateAt);
     }
 }

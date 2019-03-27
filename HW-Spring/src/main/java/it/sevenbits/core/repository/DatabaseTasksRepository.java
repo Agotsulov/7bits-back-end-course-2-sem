@@ -1,6 +1,8 @@
 package it.sevenbits.core.repository;
 
 import it.sevenbits.core.model.Task;
+import it.sevenbits.core.other.Helper;
+import it.sevenbits.core.other.TaskFactory;
 import it.sevenbits.core.other.TaskRowMapper;
 import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.PatchTaskRequest;
@@ -20,26 +22,28 @@ public class DatabaseTasksRepository implements Repository{
 
     public List<Task> getAll(final String status) {
         return jdbcOperations.query(
-                "SELECT id, name, status, createAt FROM task WHERE status = ?",
+                "SELECT id, name, status, createAt, updateAt FROM task WHERE status = ?",
                 taskRowMapper, status);
     }
 
     @Override
     public Task create(final AddTaskRequest newTask) {
-        Task task = new Task(newTask.getText());
-
+        Task task = TaskFactory.createTaskByText(newTask.getText());
         jdbcOperations.update(
-                "INSERT INTO task (id, name, status, createAt) VALUES (?, ?, ?, ?)",
-                task.getId(), task.getText(), task.getStatus(), task.getCreateAt()
+                "INSERT INTO task (id, name, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)",
+                task.getId(),
+                task.getText(),
+                task.getStatus(),
+                task.getCreateAt(),
+                task.getUpdateAt()
         );
-
         return task;
     }
 
     @Override
     public Task get(final UUID uuid) {
         return jdbcOperations.queryForObject(
-                "SELECT id, name, status, createAt FROM task WHERE id = ?",
+                "SELECT id, name, status, createAt, updateAt FROM task WHERE id = ?",
                 taskRowMapper, uuid.toString());
     }
 
@@ -52,10 +56,12 @@ public class DatabaseTasksRepository implements Repository{
 
     @Override
     public Task update(final UUID uuid, final PatchTaskRequest newTask) {
-        jdbcOperations.update("UPDATE task SET status = ? WHERE id = ?",
+        String updateAt = Helper.getCurrentTime();
+        jdbcOperations.update("UPDATE task SET status = ?, updateAt = ? WHERE id = ?",
                 newTask.getStatus(),
+                updateAt,
                 uuid.toString());
-        Task task = get(uuid); //Че лучше 2 раза обращатся к базе или один большой запрос?
+        Task task = get(uuid); //Что лучше 2 раза обращатся к базе или один большой запрос?
         return task;
     }
 }

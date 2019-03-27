@@ -14,34 +14,21 @@ public class Task {
     private final String text;
     private String status;
     private final String createAt;
+    private String updateAt;
 
 
     @JsonCreator
     public Task(@JsonProperty("id") final String id,
                 @JsonProperty("text") final String text,
                 @JsonProperty("status") final String status,
-                @JsonProperty("createAt") final String createAt
+                @JsonProperty("createAt") final String createAt,
+                @JsonProperty("updateAt") final String updateAt
                 ) {
         this.id = UUID.fromString(id);
         this.text = text;
         this.status = status;
         this.createAt = createAt;
-    }
-
-
-    // Это норм? Или лучше отдельной статической функцией сделать
-    public Task(final String text) {
-        UUID id = UUID.randomUUID();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
-
-        date.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        String createAt = date.format(new Date());
-
-        this.id = id;
-        this.text = text;
-        this.status = "inbox";
-        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 
     public UUID getId() {
@@ -64,4 +51,11 @@ public class Task {
         return createAt;
     }
 
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
+    }
 }
