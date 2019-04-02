@@ -26,16 +26,31 @@ public class TasksController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<Task>> all(
-            @RequestParam(value="status", required=false) final String status
+            @RequestParam(value = "status", required = false) final String statusQuery,
+            @RequestParam(value = "order", required = false) final String orderQuery,
+            @RequestParam(value = "page", required = false) final Integer pageQuery,
+            @RequestParam(value = "size", required = false) final Integer sizeQuery
     ) {
-        String s = "inbox";
-        if ("done".equals(status)) {
-            s = status;
+        String status = "inbox";
+        String order = "desc";
+        int page = 1;
+        int size = 25;
+        if ("done".equals(statusQuery)) {
+            status = statusQuery;
+        }
+        if (pageQuery > 0) {
+            page = pageQuery;
+        }
+        if ("asc".equals(orderQuery)) {
+            order = orderQuery;
+        }
+        if (10 <= sizeQuery && sizeQuery <= 50) {
+            size = sizeQuery;
         }
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(tasksRepository.getAll(s));
+                .body(tasksRepository.getAll(status, order, page, size));
     }
 
     @RequestMapping(method = RequestMethod.POST)

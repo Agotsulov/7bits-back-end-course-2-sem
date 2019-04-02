@@ -32,10 +32,10 @@ public class TasksControllerTest {
     @Test
     public void testGetAllTasks() {
         List<Task> mockTasks = mock(List.class);
-        when(repository.getAll("inbox")).thenReturn(mockTasks);
+        when(repository.getAll("inbox", "asc", 1, 50)).thenReturn(mockTasks);
 
-        ResponseEntity<List<Task>> answer = tasksController.all("inbox");
-        verify(repository, times(1)).getAll("inbox");
+        ResponseEntity<List<Task>> answer = tasksController.all("inbox", "asc", 1, 50);
+        verify(repository, times(1)).getAll("inbox", "asc", 1, 50);
         assertEquals(HttpStatus.OK, answer.getStatusCode());
         assertSame(mockTasks, answer.getBody());
     }

@@ -17,5 +17,5 @@ public interface Repository {
 
     Task update(UUID id, PatchTaskRequest newTask);
 
-    List<Task> getAll(String status);
+    List<Task> getAll(String status, String order, int page, int size);
 }

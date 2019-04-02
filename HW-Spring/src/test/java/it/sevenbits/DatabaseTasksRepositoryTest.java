@@ -37,13 +37,18 @@ public class DatabaseTasksRepositoryTest {
 
         when(mockJdbcOperations.query(anyString(),
                 any(RowMapper.class),
-                eq("inbox"))).thenReturn(mockTasks);
+                eq("inbox"),
+                eq(25),
+                eq(0))).thenReturn(mockTasks);
 
-        List<Task> actual = repository.getAll("inbox");
+        List<Task> actual = repository.getAll("inbox", "asc", 1, 25);
         verify(mockJdbcOperations, times(1)).query(
-                eq("SELECT id, name, status, createAt, updateAt FROM task WHERE status = ?"),
+                eq("SELECT id, name, status, createAt, updateAt " +
+                        "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?"),
                 any(RowMapper.class),
-                eq("inbox")
+                eq("inbox"),
+                eq(25),
+                eq(0)
         );
         assertSame(mockTasks, actual);
     }

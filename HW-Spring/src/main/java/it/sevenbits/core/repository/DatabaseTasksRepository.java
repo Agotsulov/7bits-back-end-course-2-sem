@@ -20,10 +20,20 @@ public class DatabaseTasksRepository implements Repository{
         this.jdbcOperations = jdbcOperations;
     }
 
-    public List<Task> getAll(final String status) {
+    public List<Task> getAll(final String status, final String order,
+                             final int page, final int size) {
+        String s = "SELECT id, name, status, createAt, updateAt " +
+                "FROM task WHERE status = ? ORDER BY createAt DESC LIMIT ? OFFSET ?";
+        if ("asc".equals(order)) {
+            s = "SELECT id, name, status, createAt, updateAt " +
+                    "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?";
+        }
         return jdbcOperations.query(
-                "SELECT id, name, status, createAt, updateAt FROM task WHERE status = ?",
-                taskRowMapper, status);
+                s,
+                taskRowMapper,
+                status,
+                size,
+                (page - 1) * size);
     }
 
     @Override
