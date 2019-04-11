@@ -1,35 +1,34 @@
 package it.sevenbits.web.contorller;
 
-import it.sevenbits.core.repository.Repository;
+import it.sevenbits.core.model.Meta;
+import it.sevenbits.core.repository.tasks.TasksRepository;
 import it.sevenbits.web.model.AddTaskRequest;
+import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
 import it.sevenbits.core.model.Task;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/tasks")
 public class TasksController {
-    private final Repository tasksRepository;
+    private final TasksRepository tasksRepository;
 
-    public TasksController(final Repository tasksRepository){
+    public TasksController(final TasksRepository tasksRepository){
         this.tasksRepository = tasksRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<List<Task>> all(
-            @RequestParam(value = "status", required = false) final String statusQuery,
-            @RequestParam(value = "order", required = false) final String orderQuery,
-            @RequestParam(value = "page", required = false) final Integer pageQuery,
-            @RequestParam(value = "size", required = false) final Integer sizeQuery
+    public ResponseEntity<ListTaskWithMetaResponse> all(
+            @RequestParam(value = "status", required = false, defaultValue = "inbox") final String statusQuery,
+            @RequestParam(value = "order", required = false, defaultValue = "desc") final String orderQuery,
+            @RequestParam(value = "page", required = false, defaultValue = "1") final Integer pageQuery,
+            @RequestParam(value = "size", required = false, defaultValue = "25") final Integer sizeQuery
     ) {
         String status = "inbox";
         String order = "desc";
@@ -47,10 +46,21 @@ public class TasksController {
         if (10 <= sizeQuery && sizeQuery <= 50) {
             size = sizeQuery;
         }
+        int total = tasksRepository.size();
+        Meta _meta = new Meta(total, page, size,
+                "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
+                "/tasks?status=" + status + "&order=" + order + "&&page=" + (page - 1) + "&size=" + size,
+                "/tasks?status=" + status + "&order=" + order + "&&page=" + 1 + "&size=" + size,
+                "/tasks?status=" + status + "&order=" + order + "&&page=" + (total / size + 1) + "&size=" + size
+                );
+
+        ListTaskWithMetaResponse listTaskWithMetaResponse = new ListTaskWithMetaResponse(_meta,
+                tasksRepository.getAll(status, order, page, size));
+
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(tasksRepository.getAll(status, order, page, size));
+                .body(listTaskWithMetaResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST)

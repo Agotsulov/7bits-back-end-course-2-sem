@@ -1,14 +1,14 @@
 package it.sevenbits;
 
 import it.sevenbits.core.model.Task;
-import it.sevenbits.core.repository.DatabaseTasksRepository;
-import it.sevenbits.core.repository.Repository;
+import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;
+import it.sevenbits.core.repository.tasks.TasksRepository;
 import it.sevenbits.web.contorller.TasksController;
 import it.sevenbits.web.model.AddTaskRequest;
+import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.codec.AbstractDataBufferDecoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 public class TasksControllerTest {
-    private Repository repository;
+    private TasksRepository repository;
     private TasksController tasksController;
 
     @Before
@@ -34,10 +34,9 @@ public class TasksControllerTest {
         List<Task> mockTasks = mock(List.class);
         when(repository.getAll("inbox", "asc", 1, 50)).thenReturn(mockTasks);
 
-        ResponseEntity<List<Task>> answer = tasksController.all("inbox", "asc", 1, 50);
+        ResponseEntity<ListTaskWithMetaResponse> answer = tasksController.all("inbox", "asc", 1, 50);
         verify(repository, times(1)).getAll("inbox", "asc", 1, 50);
         assertEquals(HttpStatus.OK, answer.getStatusCode());
-        assertSame(mockTasks, answer.getBody());
     }
 
     @Test

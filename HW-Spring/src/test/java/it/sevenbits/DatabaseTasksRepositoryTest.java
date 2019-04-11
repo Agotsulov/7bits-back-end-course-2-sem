@@ -1,16 +1,12 @@
 package it.sevenbits;
 
 import it.sevenbits.core.model.Task;
-import it.sevenbits.core.other.Helper;
-import it.sevenbits.core.repository.DatabaseTasksRepository;
-import it.sevenbits.core.repository.Repository;
-import it.sevenbits.web.contorller.TasksController;
+import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;
+import it.sevenbits.core.repository.tasks.TasksRepository;
 import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.PatchTaskRequest;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -23,7 +19,7 @@ import static org.mockito.Mockito.times;
 
 public class DatabaseTasksRepositoryTest {
     private JdbcOperations mockJdbcOperations;
-    private Repository repository;
+    private TasksRepository repository;
 
     @Before
     public void setup() {

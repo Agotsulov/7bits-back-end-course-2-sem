@@ -16,20 +16,17 @@ public class TasksDatabaseConfig {
 
     @Bean
     @FlywayDataSource
-    @Qualifier("tasksDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.tasks")
+    @Qualifier("dataSource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource tasksDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    @Qualifier("tasksJdbcOperations")
-    public JdbcOperations tasksJdbcOperations(
-            @Qualifier("tasksDataSource")
-                    DataSource tasksDataSource
-    ) {
+    @Qualifier("JdbcOperations")
+    public JdbcOperations tasksJdbcOperations(final
+            @Qualifier("dataSource") DataSource tasksDataSource) {
         return new JdbcTemplate(tasksDataSource);
     }
-
 
 }

@@ -1,4 +1,4 @@
-package it.sevenbits.core.repository;
+package it.sevenbits.core.repository.tasks;
 
 import it.sevenbits.core.model.Task;
 import it.sevenbits.core.other.Helper;
@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import java.util.List;
 import java.util.UUID;
 
-public class DatabaseTasksRepository implements Repository{
+public class DatabaseTasksRepository implements TasksRepository {
 
     private JdbcOperations jdbcOperations;
     private final TaskRowMapper taskRowMapper = new TaskRowMapper();
@@ -71,7 +71,12 @@ public class DatabaseTasksRepository implements Repository{
                 newTask.getStatus(),
                 updateAt,
                 uuid.toString());
-        Task task = get(uuid); //Что лучше 2 раза обращатся к базе или один большой запрос?
+        Task task = get(uuid);
         return task;
+    }
+
+    @Override
+    public int size() {
+        return jdbcOperations.queryForObject("SELECT COUNT(id) FROM task", Integer.class);
     }
 }

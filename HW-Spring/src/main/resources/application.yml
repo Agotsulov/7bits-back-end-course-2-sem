@@ -2,8 +2,11 @@ server:
   port: 8080
 spring:
   datasource:
-    tasks:
-      jdbc-url: jdbc:postgresql://localhost:5432/eisetasks
-      username: aaaaa
-      password: bbbbb
-      driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/eisetasks
+    username: aaaaa
+    password: bbbbb
+    driver-class-name: org.postgresql.Driver
+jwt:
+  issuer: 'agotsulov@gmail.com'
+  signingKey: 'talspoc120nxjsapqke1d77'
+  aTokenDuration: 30
