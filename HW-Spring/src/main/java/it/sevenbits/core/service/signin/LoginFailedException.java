@@ -1,4 +1,4 @@
-package it.sevenbits.core.service.login;
+package it.sevenbits.core.service.signin;
 
 import org.springframework.security.core.AuthenticationException;
 

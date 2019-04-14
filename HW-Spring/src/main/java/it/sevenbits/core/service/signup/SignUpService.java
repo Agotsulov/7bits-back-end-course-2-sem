@@ -2,14 +2,13 @@ package it.sevenbits.core.service.signup;
 
 import it.sevenbits.core.model.User;
 import it.sevenbits.core.repository.users.UsersRepository;
-import it.sevenbits.core.service.login.LoginFailedException;
-import it.sevenbits.web.model.SignInRequest;
 import it.sevenbits.web.model.SignUpRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SignUpService {
@@ -26,7 +25,14 @@ public class SignUpService {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 
-        User user = new User(login.getLogin(), passwordEncoder.encode(login.getPassword()), authorities);
+        User checkUsername = users.findByUserName(login.getUsername());
+        if (checkUsername != null) {
+            return null;
+        }
+
+        User user = new User(UUID.randomUUID().toString(),
+                login.getUsername(),
+                passwordEncoder.encode(login.getPassword()), authorities);
 
         users.create(user);
 

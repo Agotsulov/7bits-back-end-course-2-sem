@@ -12,4 +12,5 @@ public interface UsersRepository {
 
     List<User> findAll();
 
+    User findById(String id);
 }

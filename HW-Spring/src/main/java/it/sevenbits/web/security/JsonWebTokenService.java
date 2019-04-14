@@ -47,7 +47,6 @@ public class JsonWebTokenService implements JwtTokenService {
         claims.put(AUTHORITIES, user.getAuthorities());
 
         try {
-
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, settings.getTokenSigningKey())

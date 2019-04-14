@@ -1,9 +1,8 @@
 package it.sevenbits.web.contorller;
 
 import it.sevenbits.core.model.User;
-import it.sevenbits.core.service.login.SignInService;
+import it.sevenbits.core.service.signin.SignInService;
 import it.sevenbits.web.model.SignInRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

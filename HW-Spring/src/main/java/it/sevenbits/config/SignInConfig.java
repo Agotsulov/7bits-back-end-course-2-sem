@@ -1,6 +1,6 @@
 package it.sevenbits.config;
 
-import it.sevenbits.core.service.login.SignInService;
+import it.sevenbits.core.service.signin.SignInService;
 import it.sevenbits.web.contorller.CookieSignInController;
 import it.sevenbits.web.security.JwtTokenService;
 import org.springframework.context.annotation.Bean;
