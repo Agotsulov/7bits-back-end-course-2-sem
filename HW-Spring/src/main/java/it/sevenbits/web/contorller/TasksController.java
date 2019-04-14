@@ -65,7 +65,8 @@ public class TasksController {
         int total = tasksRepository.size();
         if (page > total / size) {
             page = total / size + 1;
-        } 
+        }
+        //В api не понятно нажно ли тут проверки на то что next и prev дают не существующие странницы. (я бы null давал тогда)
         Meta meta = new Meta(total, page, size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page - 1) + "&size=" + size,

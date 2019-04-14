@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/users/**").hasAuthority("ADMIN")
                 .and()
-                .authorizeRequests().antMatchers("/tasks/**").hasAuthority("USER")
+                .authorizeRequests().antMatchers("/tasks/**").anonymous() // Это для homework3
                 .and()
                 .authorizeRequests().anyRequest().authenticated();
     }
