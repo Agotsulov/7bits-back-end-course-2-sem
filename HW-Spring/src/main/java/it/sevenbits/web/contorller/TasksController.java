@@ -6,6 +6,7 @@ import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
 import it.sevenbits.core.model.Task;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,21 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/tasks")
 public class TasksController {
+
+    @Value("${meta.defaultStatus}")
+    private String defaultStatus;
+    @Value("${meta.defaultOrder}")
+    private String defaultOrder;
+    @Value("${meta.defaultPage}")
+    private int defaultPage;
+    @Value("${meta.defaultSize}")
+    private int defaultSize;
+    @Value("${meta.minSize}")
+    private int defaultMinSize;
+    @Value("${meta.maxSize}")
+    private int defaultMaxSize;
+
+
     private final TasksRepository tasksRepository;
 
     public TasksController(final TasksRepository tasksRepository){
@@ -30,10 +46,10 @@ public class TasksController {
             @RequestParam(value = "page", required = false, defaultValue = "1") final Integer pageQuery,
             @RequestParam(value = "size", required = false, defaultValue = "25") final Integer sizeQuery
     ) {
-        String status = "inbox";
-        String order = "desc";
-        int page = 1;
-        int size = 25;
+        String status = defaultStatus;
+        String order = defaultOrder;
+        int page = defaultPage;
+        int size = defaultSize;
         if ("done".equals(statusQuery)) {
             status = statusQuery;
         }
@@ -43,18 +59,21 @@ public class TasksController {
         if ("asc".equals(orderQuery)) {
             order = orderQuery;
         }
-        if (10 <= sizeQuery && sizeQuery <= 50) {
+        if (defaultMinSize <= sizeQuery && sizeQuery <= defaultMaxSize) {
             size = sizeQuery;
         }
         int total = tasksRepository.size();
-        Meta _meta = new Meta(total, page, size,
+        if (page > total / size) {
+            page = total / size + 1;
+        } 
+        Meta meta = new Meta(total, page, size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page - 1) + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + 1 + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (total / size + 1) + "&size=" + size
                 );
 
-        ListTaskWithMetaResponse listTaskWithMetaResponse = new ListTaskWithMetaResponse(_meta,
+        ListTaskWithMetaResponse listTaskWithMetaResponse = new ListTaskWithMetaResponse(meta,
                 tasksRepository.getAll(status, order, page, size));
 
         return ResponseEntity

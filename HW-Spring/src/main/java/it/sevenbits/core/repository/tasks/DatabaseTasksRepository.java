@@ -27,7 +27,7 @@ public class DatabaseTasksRepository implements TasksRepository {
         if ("asc".equals(order)) {
             s = "SELECT id, name, status, createAt, updateAt " +
                     "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?";
-        }
+        } // Я не знаю как это сделать нормально, кроме тупо соединением строк. И я спрашивал на workshop.
         return jdbcOperations.query(
                 s,
                 taskRowMapper,

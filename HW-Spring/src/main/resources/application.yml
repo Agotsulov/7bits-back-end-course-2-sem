@@ -10,3 +10,10 @@ jwt:
   issuer: 'agotsulov@gmail.com'
   signingKey: 'talspoc120nxjsapqke1d77'
   aTokenDuration: 30
+meta:
+  defaultStatus: "inbox"
+  defaultOrder: "desc"
+  defaultPage: 1
+  defaultSize: 25
+  minSize: 10
+  maxSize: 50
