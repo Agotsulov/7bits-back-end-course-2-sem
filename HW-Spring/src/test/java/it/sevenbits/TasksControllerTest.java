@@ -54,7 +54,7 @@ public class TasksControllerTest {
     @Test
     public void testDeleteTask() {
         Task task = mock(Task.class);
-        UUID id = UUID.randomUUID();
+        String id = UUID.randomUUID().toString();
         when(repository.remove(id)).thenReturn(task);
 
         ResponseEntity<Void> answer = tasksController.deleteTask(id.toString());
@@ -66,7 +66,7 @@ public class TasksControllerTest {
     @Test
     public void testGetTask() {
         Task task = mock(Task.class);
-        UUID id = UUID.randomUUID();
+        String id = UUID.randomUUID().toString();
         when(repository.get(id)).thenReturn(task);
 
         ResponseEntity<Task> answer = tasksController.getTask(id.toString());
@@ -78,12 +78,12 @@ public class TasksControllerTest {
     @Test
     public void testPatchTask() {
         Task task = mock(Task.class);
-        UUID id = UUID.randomUUID();
-        PatchTaskRequest patchTaskRequest = new PatchTaskRequest("done");
-        when(repository.update(id, patchTaskRequest)).thenReturn(task);
+        String id = UUID.randomUUID().toString();
+        PatchTaskRequest patchTaskRequest = new PatchTaskRequest("done", "");
+        when(repository.get(id)).thenReturn(task);
 
         ResponseEntity<Void> answer = tasksController.patchTask(id.toString(), patchTaskRequest);
-        verify(repository, times(1)).update(id, patchTaskRequest);
+        verify(repository, times(1)).update(task);
         assertEquals(HttpStatus.NO_CONTENT, answer.getStatusCode());
     }
 

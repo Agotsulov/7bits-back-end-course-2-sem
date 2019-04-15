@@ -11,10 +11,10 @@ import java.util.UUID;
 public class Task {
 
     private final UUID id;
-    private final String text;
+    private String text;
     private String status;
     private final String createAt;
-    private String updateAt;
+    private final String updateAt;
 
 
     @JsonCreator
@@ -39,12 +39,20 @@ public class Task {
         return text;
     }
 
+    public void setText(final String text) {
+        if ("".equals(text)) {
+            this.text = text;
+        }
+    }
+
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(final String status) {
+        if (("done".equals(status) || "inbox".equals(status))) {
+            this.status = status;
+        }
     }
 
     public String getCreateAt() {
@@ -55,7 +63,4 @@ public class Task {
         return updateAt;
     }
 
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt;
-    }
 }

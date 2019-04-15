@@ -51,28 +51,32 @@ public class DatabaseTasksRepository implements TasksRepository {
     }
 
     @Override
-    public Task get(final UUID uuid) {
-        return jdbcOperations.queryForObject(
-                "SELECT id, name, status, createAt, updateAt FROM task WHERE id = ?",
-                taskRowMapper, uuid.toString());
+    public Task get(final String uuid) {
+        List<Task> result = jdbcOperations.query(
+                "SELECT id, text, status, createAt, updateAt FROM task WHERE id = ?",
+                taskRowMapper, uuid);
+        if (result == null || result.size() == 0) {
+            return null;
+        } else {
+            return result.get(0);
+        }
     }
 
     @Override
-    public Task remove(final UUID uuid) {
+    public Task remove(final String uuid) {
         Task task = get(uuid);
-        jdbcOperations.update("DELETE FROM task WHERE id = ?", uuid.toString());
+        jdbcOperations.update("DELETE FROM task WHERE id = ?", uuid);
         return task;
     }
 
     @Override
-    public Task update(final UUID uuid, final PatchTaskRequest newTask) {
+    public void update(final Task task) {
         String updateAt = Helper.getCurrentTime();
-        jdbcOperations.update("UPDATE task SET status = ?, updateAt = ? WHERE id = ?",
-                newTask.getStatus(),
+        jdbcOperations.update("UPDATE task SET text = ?, status = ?, updateAt = ? WHERE id = ?",
+                task.getText(),
+                task.getStatus(),
                 updateAt,
-                uuid.toString());
-        Task task = get(uuid);
-        return task;
+                task.getId().toString());
     }
 
     @Override

@@ -103,7 +103,7 @@ public class TasksController {
     @ResponseBody
     public ResponseEntity<Task> getTask(@PathVariable("id") final String id) {
         UUID uuid = UUID.fromString(id);
-        Task task = tasksRepository.get(uuid);
+        Task task = tasksRepository.get(id);
         if (task == null) {
             return ResponseEntity.notFound().build();
         }
@@ -113,19 +113,14 @@ public class TasksController {
     @RequestMapping(method = RequestMethod.PATCH,value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> patchTask(@PathVariable("id") final String id,
-                            @RequestBody final PatchTaskRequest newStatus) {
-        if (newStatus == null
-                || newStatus.getStatus() == null
-                || "".equals(newStatus.getStatus())
-                || !("inbox".equals(newStatus.getStatus()) || "done".equals(newStatus.getStatus()))
-        ) {
-            return ResponseEntity.badRequest().build();
-        }
-        Task task = tasksRepository.update(UUID.fromString(id), newStatus);
+                            @RequestBody final PatchTaskRequest patchTaskRequest) {
+        Task task = tasksRepository.get(id);
         if (task == null) {
             return ResponseEntity.notFound().build();
         }
-        task.setStatus(newStatus.getStatus());
+        task.setStatus(patchTaskRequest.getStatus());
+        task.setText(patchTaskRequest.getText());
+        tasksRepository.update(task);
         return ResponseEntity.noContent().build();
 
     }
@@ -133,7 +128,7 @@ public class TasksController {
     @RequestMapping(method = RequestMethod.DELETE,value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteTask(@PathVariable("id") final String id) {
-        Task task = tasksRepository.remove(UUID.fromString(id));
+        Task task = tasksRepository.remove(id);
         if (task == null) {
             return ResponseEntity.notFound().build();
         }

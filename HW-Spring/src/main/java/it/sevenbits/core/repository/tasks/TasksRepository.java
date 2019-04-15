@@ -11,11 +11,11 @@ public interface TasksRepository {
 
     Task create(AddTaskRequest newTask);
 
-    Task get(UUID id);
+    Task get(String id);
 
-    Task remove(UUID id);
+    Task remove(String id);
 
-    Task update(UUID id, PatchTaskRequest newTask);
+    void update(Task task);
 
     List<Task> getAll(String status, String order, int page, int size);
 

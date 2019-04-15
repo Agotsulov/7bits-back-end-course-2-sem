@@ -53,7 +53,7 @@ public class DatabaseTasksRepositoryTest {
     public void testGetTask() {
         Task mockTask = mock(Task.class);
 
-        UUID id = UUID.randomUUID();
+        String id = UUID.randomUUID().toString();
 
         when(mockJdbcOperations.queryForObject(anyString(), any(RowMapper.class), anyString())).thenReturn(mockTask);
 
@@ -68,7 +68,7 @@ public class DatabaseTasksRepositoryTest {
 
     @Test
     public void testRemoveTask() {
-        UUID id = UUID.randomUUID();
+        String id = UUID.randomUUID().toString();
 
         repository.remove(id);
         verify(mockJdbcOperations, times(1)).update(
@@ -79,15 +79,16 @@ public class DatabaseTasksRepositoryTest {
 
     @Test
     public void testPatchTask() {
-        UUID id = UUID.randomUUID();
-        PatchTaskRequest patchTaskRequest = new PatchTaskRequest("done");
+        String id = UUID.randomUUID().toString();
+        Task task = new Task(id, "test", "done", "0", "0");
 
-        repository.update(id, patchTaskRequest);
+        repository.update(task);
         verify(mockJdbcOperations, times(1)).update(
-                eq("UPDATE task SET status = ?, updateAt = ? WHERE id = ?"),
-                eq(patchTaskRequest.getStatus()),
+                eq("UPDATE task SET text = ?, status = ?, updateAt = ? WHERE id = ?"),
+                eq(task.getText()),
+                eq(task.getStatus()),
                 anyString(),
-                eq(id.toString())
+                eq(id)
         );
     }
 

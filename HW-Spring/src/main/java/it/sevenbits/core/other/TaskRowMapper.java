@@ -12,10 +12,10 @@ public class TaskRowMapper implements RowMapper<Task>{
     @Override
     public Task mapRow(ResultSet resultSet, int i) throws SQLException {
         String id = resultSet.getString(1);
-        String name = resultSet.getString(2);
+        String text = resultSet.getString(2);
         String status = resultSet.getString(3);
         String createAt = resultSet.getString(4);
         String updateAt = resultSet.getString(5);
-        return new Task(id, name, status, createAt, updateAt);
+        return new Task(id, text, status, createAt, updateAt);
     }
 }

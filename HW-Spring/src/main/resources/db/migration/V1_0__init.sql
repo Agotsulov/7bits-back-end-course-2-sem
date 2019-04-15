@@ -1,5 +1,5 @@
 CREATE TABLE task (
     id VARCHAR(256) PRIMARY KEY,
-    name VARCHAR(256) NOT NULL,
+    text VARCHAR(256) NOT NULL,
     status VARCHAR(256) DEFAULT 'inbox'
 );
