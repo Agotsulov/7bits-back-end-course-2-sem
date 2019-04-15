@@ -2,12 +2,10 @@ package it.sevenbits.web.contorller;
 
 import it.sevenbits.core.model.User;
 import it.sevenbits.core.repository.users.UsersRepository;
+import it.sevenbits.web.model.PatchUserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +33,13 @@ public class UsersController {
                 .ofNullable( usersRepository.findById(id) )
                 .map( user -> ResponseEntity.ok().body(user) )
                 .orElseGet( () -> ResponseEntity.notFound().build() );
+    }
+
+    @PatchMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity patchUserInfo(final @PathVariable("id") String id,
+                                              final @RequestBody PatchUserRequest patchUserRequest) {
+        usersRepository.update(id, patchUserRequest);
+        return ResponseEntity.ok().build();
     }
 }

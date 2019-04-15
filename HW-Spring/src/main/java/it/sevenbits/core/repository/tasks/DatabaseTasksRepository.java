@@ -22,10 +22,10 @@ public class DatabaseTasksRepository implements TasksRepository {
 
     public List<Task> getAll(final String status, final String order,
                              final int page, final int size) {
-        String s = "SELECT id, name, status, createAt, updateAt " +
+        String s = "SELECT id, text, status, createAt, updateAt " +
                 "FROM task WHERE status = ? ORDER BY createAt DESC LIMIT ? OFFSET ?";
         if ("asc".equals(order)) {
-            s = "SELECT id, name, status, createAt, updateAt " +
+            s = "SELECT id, text, status, createAt, updateAt " +
                     "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?";
         } // Я не знаю как это сделать нормально, кроме тупо соединением строк. И я спрашивал на workshop.
         return jdbcOperations.query(
@@ -40,7 +40,7 @@ public class DatabaseTasksRepository implements TasksRepository {
     public Task create(final AddTaskRequest newTask) {
         Task task = TaskFactory.createTaskByText(newTask.getText());
         jdbcOperations.update(
-                "INSERT INTO task (id, name, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO task (id, text, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)",
                 task.getId(),
                 task.getText(),
                 task.getStatus(),

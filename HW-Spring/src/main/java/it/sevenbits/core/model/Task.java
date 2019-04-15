@@ -16,7 +16,6 @@ public class Task {
     private final String createAt;
     private final String updateAt;
 
-
     @JsonCreator
     public Task(@JsonProperty("id") final String id,
                 @JsonProperty("text") final String text,
@@ -40,7 +39,7 @@ public class Task {
     }
 
     public void setText(final String text) {
-        if ("".equals(text)) {
+        if (text != null && !"".equals(text)) {
             this.text = text;
         }
     }

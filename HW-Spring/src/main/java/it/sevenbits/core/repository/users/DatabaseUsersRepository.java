@@ -1,6 +1,7 @@
 package it.sevenbits.core.repository.users;
 
 import it.sevenbits.core.model.User;
+import it.sevenbits.web.model.PatchUserRequest;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,5 +109,37 @@ public class DatabaseUsersRepository implements UsersRepository {
                 user.getId(),
                 "USER"
         );
+    }
+
+    @Override
+    public void update(final String id, final PatchUserRequest patchUserRequest) {
+        jdbcOperations.update(
+                "UPDATE users SET enabled = ? WHERE id = ?",
+                patchUserRequest.isEnabled(),
+                id
+        );
+        if (patchUserRequest.getAuthorities() != null) {
+            List<String> current = findAuthorities(id);
+
+            List<String> delete = new ArrayList<>(current); // TODO: fix
+            delete.removeAll(patchUserRequest.getAuthorities());
+            List<String> create = new ArrayList<>(patchUserRequest.getAuthorities());
+            create.removeAll(current);
+
+            for (String c : create) {
+                jdbcOperations.update(
+                        "INSERT INTO authorities (id, authority) VALUES (?, ?)",
+                        id,
+                        c
+                );
+            }
+            for (String d : delete) {
+                jdbcOperations.update(
+                        "DELETE FROM authorities WHERE id = ? AND authority = ?",
+                        id,
+                        d
+                );
+            }
+        }
     }
 }

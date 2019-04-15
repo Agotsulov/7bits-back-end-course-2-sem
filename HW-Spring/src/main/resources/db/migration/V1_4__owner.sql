@@ -1,0 +1,1 @@
+ALTER TABLE task ADD owner VARCHAR(256);
