@@ -2,8 +2,6 @@ package it.sevenbits.config;
 
 import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;
 import it.sevenbits.core.repository.tasks.TasksRepository;
-import it.sevenbits.core.repository.users.DatabaseUsersRepository;
-import it.sevenbits.core.repository.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +13,5 @@ public class RepositoryConfig {
     public TasksRepository tasksRepository(
             @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
         return new DatabaseTasksRepository(jdbcOperations);
-    }
-
-    @Bean
-    public UsersRepository usersRepository(
-            @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
-        return new DatabaseUsersRepository(jdbcOperations);
     }
 }

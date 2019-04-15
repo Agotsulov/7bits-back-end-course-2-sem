@@ -19,18 +19,18 @@ import java.util.UUID;
 public class TasksController {
 
     @Value("${meta.defaultStatus}")
-    private String defaultStatus;
+    private String defaultStatus = "inbox";
     @Value("${meta.defaultOrder}")
-    private String defaultOrder;
+    private String defaultOrder = "desc";
     @Value("${meta.defaultPage}")
-    private int defaultPage;
+    private int defaultPage = 1;
     @Value("${meta.defaultSize}")
-    private int defaultSize;
+    private int defaultSize = 25;
     @Value("${meta.minSize}")
-    private int defaultMinSize;
+    private int defaultMinSize = 10;
     @Value("${meta.maxSize}")
-    private int defaultMaxSize;
-
+    private int defaultMaxSize = 50;
+    //Так как в тесте объект мокается, то деволнтые = 0. И там деленее на 0. Нужно ли получать 0 задании со старницы? 
 
     private final TasksRepository tasksRepository;
 
@@ -63,9 +63,6 @@ public class TasksController {
             size = sizeQuery;
         }
         int total = tasksRepository.size();
-        if (page > total / size) {
-            page = total / size + 1;
-        }
         //В api не понятно нажно ли тут проверки на то что next и prev дают не существующие странницы. (я бы null давал тогда)
         Meta meta = new Meta(total, page, size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
