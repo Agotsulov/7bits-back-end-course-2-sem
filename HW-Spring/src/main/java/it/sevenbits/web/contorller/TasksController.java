@@ -1,7 +1,9 @@
 package it.sevenbits.web.contorller;
 
 import it.sevenbits.core.model.Meta;
+import it.sevenbits.core.model.User;
 import it.sevenbits.core.repository.tasks.TasksRepository;
+import it.sevenbits.core.repository.users.UsersRepository;
 import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +42,30 @@ public class TasksController {
     @Value("${meta.maxSize}")
     private int defaultMaxSize = 1;
 
+    private final UsersRepository usersRepository;
     private final TasksRepository tasksRepository;
 
-    public TasksController(final TasksRepository tasksRepository) {
+    public TasksController(final TasksRepository tasksRepository,
+                           final UsersRepository usersRepository) {
         this.tasksRepository = tasksRepository;
+        this.usersRepository = usersRepository;
+    }
+
+    private String getCurrentId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = usersRepository.findByUserName(username);
+        return user.getId();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -67,7 +92,10 @@ public class TasksController {
         if (defaultMinSize <= sizeQuery && sizeQuery <= defaultMaxSize) {
             size = sizeQuery;
         }
-        int total = tasksRepository.size();
+
+        String owner = getCurrentId();
+
+        int total = tasksRepository.size(owner);
         Meta meta = new Meta(total, page, size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page - 1) + "&size=" + size,
@@ -75,8 +103,9 @@ public class TasksController {
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (total / size + 1) + "&size=" + size
         );
 
+
         ListTaskWithMetaResponse listTaskWithMetaResponse = new ListTaskWithMetaResponse(meta,
-                tasksRepository.getAll(status, order, page, size));
+                tasksRepository.getAll(status, order, page, size, owner));
 
         return ResponseEntity
                 .ok()
@@ -93,7 +122,7 @@ public class TasksController {
             return ResponseEntity.badRequest().build();
         }
 
-        Task task = tasksRepository.create(newTask);
+        Task task = tasksRepository.create(newTask.getText(), getCurrentId());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", "/tasks/" + task.getId().toString());
@@ -103,8 +132,7 @@ public class TasksController {
     @RequestMapping(method = RequestMethod.GET, value = "{id}")
     @ResponseBody
     public ResponseEntity<Task> getTask(@PathVariable("id") final String id) {
-        UUID uuid = UUID.fromString(id);
-        Task task = tasksRepository.get(id);
+        Task task = tasksRepository.get(id, getCurrentId());
         if (task == null) {
             return ResponseEntity.notFound().build();
         }
@@ -115,13 +143,13 @@ public class TasksController {
     @ResponseBody
     public ResponseEntity<Void> patchTask(@PathVariable("id") final String id,
                             @RequestBody final PatchTaskRequest patchTaskRequest) {
-        Task task = tasksRepository.get(id);
+        Task task = tasksRepository.get(id, getCurrentId());
         if (task == null) {
             return ResponseEntity.notFound().build();
         }
         task.setStatus(patchTaskRequest.getStatus());
         task.setText(patchTaskRequest.getText());
-        tasksRepository.update(task);
+        tasksRepository.update(task, getCurrentId());
         return ResponseEntity.noContent().build();
 
     }
@@ -129,7 +157,7 @@ public class TasksController {
     @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteTask(@PathVariable("id") final String id) {
-        Task task = tasksRepository.remove(id);
+        Task task = tasksRepository.remove(id, getCurrentId());
         if (task == null) {
             return ResponseEntity.notFound().build();
         }

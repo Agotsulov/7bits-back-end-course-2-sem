@@ -20,41 +20,47 @@ public class DatabaseTasksRepository implements TasksRepository {
         this.jdbcOperations = jdbcOperations;
     }
 
+    @Override
     public List<Task> getAll(final String status, final String order,
-                             final int page, final int size) {
+                             final int page, final int size, final String owner) {
         String s = "SELECT id, text, status, createAt, updateAt " +
-                "FROM task WHERE status = ? ORDER BY createAt DESC LIMIT ? OFFSET ?";
+                "FROM task WHERE status = ? AND owner = ? ORDER BY createAt DESC LIMIT ? OFFSET ?";
         if ("asc".equals(order)) {
             s = "SELECT id, text, status, createAt, updateAt " +
-                    "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?";
-        } // Я не знаю как это сделать нормально, кроме тупо соединением строк. И я спрашивал на workshop.
+                    "FROM task WHERE status = ? AND owner = ? ORDER BY createAt ASC LIMIT ? OFFSET ?";
+        }
         return jdbcOperations.query(
                 s,
                 taskRowMapper,
                 status,
+                owner,
                 size,
-                (page - 1) * size);
+                (page - 1) * size
+        );
     }
 
     @Override
-    public Task create(final AddTaskRequest newTask) {
-        Task task = TaskFactory.createTaskByText(newTask.getText());
+    public Task create(final String text, final String owner) {
+        Task task = TaskFactory.createTaskByText(text);
         jdbcOperations.update(
-                "INSERT INTO task (id, text, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO task (id, text, status, createAt, updateAt, owner)" +
+                        " VALUES (?, ?, ?, ?, ?, ?)",
                 task.getId(),
                 task.getText(),
                 task.getStatus(),
                 task.getCreateAt(),
-                task.getUpdateAt()
+                task.getUpdateAt(),
+                owner
         );
         return task;
     }
 
     @Override
-    public Task get(final String uuid) {
+    public Task get(final String id, final String owner) {
         List<Task> result = jdbcOperations.query(
-                "SELECT id, text, status, createAt, updateAt FROM task WHERE id = ?",
-                taskRowMapper, uuid);
+                "SELECT id, text, status, createAt, updateAt " +
+                        "FROM task WHERE id = ? AND owner = ?",
+                taskRowMapper, id, owner);
         if (result == null || result.size() == 0) {
             return null;
         } else {
@@ -63,24 +69,30 @@ public class DatabaseTasksRepository implements TasksRepository {
     }
 
     @Override
-    public Task remove(final String uuid) {
-        Task task = get(uuid);
-        jdbcOperations.update("DELETE FROM task WHERE id = ?", uuid);
+    public Task remove(final String id, final String owner) {
+        Task task = get(id, owner);
+        jdbcOperations.update("DELETE FROM task WHERE id = ? AND owner = ?",
+                id,
+                owner
+        );
         return task;
     }
 
     @Override
-    public void update(final Task task) {
+    public void update(final Task task, final String owner) {
         String updateAt = Helper.getCurrentTime();
-        jdbcOperations.update("UPDATE task SET text = ?, status = ?, updateAt = ? WHERE id = ?",
+        jdbcOperations.update("UPDATE task SET text = ?, status = ?, updateAt = ? " +
+                        "WHERE id = ? AND owner = ?",
                 task.getText(),
                 task.getStatus(),
                 updateAt,
-                task.getId().toString());
+                task.getId().toString(),
+                owner);
     }
 
     @Override
-    public int size() {
-        return jdbcOperations.queryForObject("SELECT COUNT(id) FROM task", Integer.class);
+    public int size(final String owner) {
+        return jdbcOperations.queryForObject("SELECT COUNT(id) FROM task WHERE owner = ?",
+                Integer.class, owner);
     }
 }

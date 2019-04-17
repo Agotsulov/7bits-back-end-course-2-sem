@@ -20,7 +20,7 @@ public class DatabaseUsersRepository implements UsersRepository {
     private final String USERNAME = "username";
     private final String PASSWORD = "password";
 
-    public DatabaseUsersRepository(JdbcOperations jdbcOperations) {
+    public DatabaseUsersRepository(final JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
 

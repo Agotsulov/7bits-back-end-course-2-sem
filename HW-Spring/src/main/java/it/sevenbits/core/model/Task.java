@@ -1,25 +1,31 @@
 package it.sevenbits.core.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
 public class Task {
 
+    @JsonProperty("id")
     private final UUID id;
+    @JsonProperty("text")
     private String text;
+    @JsonProperty("status")
     private String status;
+    @JsonProperty("createAt")
     private final String createAt;
+    @JsonProperty("updateAt")
     private final String updateAt;
 
-    @JsonCreator
-    public Task(@JsonProperty("id") final String id,
-                @JsonProperty("text") final String text,
-                @JsonProperty("status") final String status,
-                @JsonProperty("createAt") final String createAt,
-                @JsonProperty("updateAt") final String updateAt
-                ) {
+
+    public Task(final String id,
+                final String text,
+                final String status,
+                final String createAt,
+                final String updateAt
+    ) {
         this.id = UUID.fromString(id);
         this.text = text;
         this.status = status;

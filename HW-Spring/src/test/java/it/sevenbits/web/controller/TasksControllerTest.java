@@ -3,7 +3,10 @@ package it.sevenbits.web.controller;
 import it.sevenbits.core.model.Task;
 import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;
 import it.sevenbits.core.repository.tasks.TasksRepository;
+import it.sevenbits.core.repository.users.DatabaseUsersRepository;
+import it.sevenbits.core.repository.users.UsersRepository;
 import it.sevenbits.web.contorller.TasksController;
+import it.sevenbits.web.contorller.UsersController;
 import it.sevenbits.web.model.AddTaskRequest;
 import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
@@ -20,22 +23,26 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 public class TasksControllerTest {
-    private TasksRepository repository;
+
+    private TasksRepository tasksRepository;
+    private UsersRepository usersRepository;
+
     private TasksController tasksController;
 
     @Before
     public void setup() {
-        repository = mock(DatabaseTasksRepository.class);
-        tasksController = new TasksController(repository);
+        tasksRepository = mock(DatabaseTasksRepository.class);
+        usersRepository = mock(DatabaseUsersRepository.class);
+        tasksController = new TasksController(tasksRepository, usersRepository);
     }
 
     @Test
     public void testGetAllTasks() {
         List<Task> mockTasks = mock(List.class);
-        when(repository.getAll("inbox", "asc", 1, 50)).thenReturn(mockTasks);
+        when(tasksRepository.getAll("inbox", "asc", 1, 50, "testUser")).thenReturn(mockTasks);
 
         ResponseEntity<ListTaskWithMetaResponse> answer = tasksController.all("inbox", "asc", 1, 50);
-        verify(repository, times(1)).getAll("inbox", "asc", 1, 50);
+        verify(tasksRepository, times(1)).getAll("inbox", "asc", 1, 50, "testUser");
         assertEquals(HttpStatus.OK, answer.getStatusCode());
     }
 
@@ -43,10 +50,10 @@ public class TasksControllerTest {
     public void testCreateTask() {
         Task task = mock(Task.class);
         AddTaskRequest taskRequest = new AddTaskRequest("TEST");
-        when(repository.create(taskRequest)).thenReturn(task);
+        when(tasksRepository.create("TEST", "testUser")).thenReturn(task);
 
         ResponseEntity<Task> answer = tasksController.create(taskRequest);
-        verify(repository, times(1)).create(taskRequest);
+        verify(tasksRepository, times(1)).create("TEST", "testUser");
         assertEquals(HttpStatus.OK, answer.getStatusCode());
         assertSame(task, answer.getBody());
     }
@@ -55,10 +62,10 @@ public class TasksControllerTest {
     public void testDeleteTask() {
         Task task = mock(Task.class);
         String id = UUID.randomUUID().toString();
-        when(repository.remove(id)).thenReturn(task);
+        when(tasksRepository.remove(id, "testUser")).thenReturn(task);
 
-        ResponseEntity<Void> answer = tasksController.deleteTask(id.toString());
-        verify(repository, times(1)).remove(id);
+        ResponseEntity<Void> answer = tasksController.deleteTask(id);
+        verify(tasksRepository, times(1)).remove(id, "testUser");
         assertEquals(HttpStatus.OK, answer.getStatusCode());
     }
 
@@ -67,10 +74,10 @@ public class TasksControllerTest {
     public void testGetTask() {
         Task task = mock(Task.class);
         String id = UUID.randomUUID().toString();
-        when(repository.get(id)).thenReturn(task);
+        when(tasksRepository.get(id, "testUser")).thenReturn(task);
 
-        ResponseEntity<Task> answer = tasksController.getTask(id.toString());
-        verify(repository, times(1)).get(id);
+        ResponseEntity<Task> answer = tasksController.getTask(id);
+        verify(tasksRepository, times(1)).get(id, "testUser");
         assertEquals(HttpStatus.OK, answer.getStatusCode());
         assertSame(task, answer.getBody());
     }
@@ -80,10 +87,10 @@ public class TasksControllerTest {
         Task task = mock(Task.class);
         String id = UUID.randomUUID().toString();
         PatchTaskRequest patchTaskRequest = new PatchTaskRequest("done", "");
-        when(repository.get(id)).thenReturn(task);
+        when(tasksRepository.get(id, "testUser")).thenReturn(task);
 
-        ResponseEntity<Void> answer = tasksController.patchTask(id.toString(), patchTaskRequest);
-        verify(repository, times(1)).update(task);
+        ResponseEntity<Void> answer = tasksController.patchTask(id, patchTaskRequest);
+        verify(tasksRepository, times(1)).update(task, "testUser");
         assertEquals(HttpStatus.NO_CONTENT, answer.getStatusCode());
     }
 

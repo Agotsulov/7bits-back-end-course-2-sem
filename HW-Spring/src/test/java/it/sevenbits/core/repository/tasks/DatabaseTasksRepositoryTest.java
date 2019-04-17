@@ -35,16 +35,19 @@ public class DatabaseTasksRepositoryTest {
                 any(RowMapper.class),
                 eq("inbox"),
                 eq(25),
-                eq(0))).thenReturn(mockTasks);
+                eq(0),
+                eq("testUser"))).thenReturn(mockTasks);
 
-        List<Task> actual = repository.getAll("inbox", "asc", 1, 25);
+        List<Task> actual = repository.getAll(
+                "inbox", "asc", 1, 25, "testUser");
         verify(mockJdbcOperations, times(1)).query(
                 eq("SELECT id, text, status, createAt, updateAt " +
-                        "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?"),
+                        "FROM task WHERE status = ? AND owner = ? ORDER BY createAt ASC LIMIT ? OFFSET ?"),
                 any(RowMapper.class),
                 eq("inbox"),
                 eq(25),
-                eq(0)
+                eq(0),
+                eq("testUser")
         );
         assertSame(mockTasks, actual);
     }
@@ -57,11 +60,13 @@ public class DatabaseTasksRepositoryTest {
 
         when(mockJdbcOperations.queryForObject(anyString(), any(RowMapper.class), anyString())).thenReturn(mockTask);
 
-        repository.get(id);
+        repository.get(id, "testUser");
         verify(mockJdbcOperations, times(1)).query(
-                eq("SELECT id, text, status, createAt, updateAt FROM task WHERE id = ?"),
+                eq("SELECT id, text, status, createAt, updateAt " +
+                        "FROM task WHERE id = ? AND owner = ?"),
                 any(RowMapper.class),
-                eq(id)
+                eq(id),
+                eq("testUser")
         );
     }
 
@@ -69,10 +74,11 @@ public class DatabaseTasksRepositoryTest {
     public void testRemoveTask() {
         String id = UUID.randomUUID().toString();
 
-        repository.remove(id);
+        repository.remove(id, "testUser");
         verify(mockJdbcOperations, times(1)).update(
-                eq("DELETE FROM task WHERE id = ?"),
-                eq(id)
+                eq("DELETE FROM task WHERE id = ? AND owner = ?"),
+                eq(id),
+                eq("testUser")
         );
     }
 
@@ -81,13 +87,15 @@ public class DatabaseTasksRepositoryTest {
         String id = UUID.randomUUID().toString();
         Task task = new Task(id, "test", "done", "0", "0");
 
-        repository.update(task);
+        repository.update(task, "testUser");
         verify(mockJdbcOperations, times(1)).update(
-                eq("UPDATE task SET text = ?, status = ?, updateAt = ? WHERE id = ?"),
+                eq("UPDATE task SET text = ?, status = ?, updateAt = ?" +
+                        " WHERE id = ? AND owner = ?"),
                 eq(task.getText()),
                 eq(task.getStatus()),
                 anyString(),
-                eq(id)
+                eq(id),
+                eq("testUser")
         );
     }
 
@@ -96,14 +104,16 @@ public class DatabaseTasksRepositoryTest {
 
         AddTaskRequest addTaskRequest = new AddTaskRequest("TEST");
 
-        Task task = repository.create(addTaskRequest);
+        Task task = repository.create(addTaskRequest.getText(), "testUser");
         verify(mockJdbcOperations, times(1)).update(
-                eq("INSERT INTO task (id, text, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)"),
+                eq("INSERT INTO task (id, text, status, createAt, updateAt)" +
+                        " VALUES (?, ?, ?, ?, ?, ?)"),
                 eq(task.getId()),
                 eq(task.getText()),
                 eq(task.getStatus()),
                 eq(task.getCreateAt()),
-                eq(task.getUpdateAt())
+                eq(task.getUpdateAt()),
+                eq("testUser")
         );
     }
 

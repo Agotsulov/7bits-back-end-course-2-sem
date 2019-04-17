@@ -1,21 +1,24 @@
 package it.sevenbits.core.repository.tasks;
 
 import it.sevenbits.core.model.Task;
-import it.sevenbits.web.model.AddTaskRequest;
 
 import java.util.List;
 
 public interface TasksRepository {
 
-    Task create(AddTaskRequest newTask);
+    Task create(String text, String owner);
 
-    Task get(String id);
+    Task get(String id, String owner);
 
-    Task remove(String id);
+    Task remove(String id, String owner);
 
-    void update(Task task);
+    void update(Task task, String owner);
 
-    List<Task> getAll(String status, String order, int page, int size);
+    List<Task> getAll(String status,
+                      String order,
+                      int page,
+                      int size,
+                      String owner);
 
-    int size();
+    int size(String owner);
 }
