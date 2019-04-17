@@ -6,16 +6,15 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TaskRowMapper implements RowMapper<Task>{
+public class TaskRowMapper implements RowMapper<Task> {
 
-    //Хз как пакет назвать. Это чтобы код не дублировать, а ламбду тут не написать
     @Override
-    public Task mapRow(ResultSet resultSet, int i) throws SQLException {
-        String id = resultSet.getString(1);
-        String name = resultSet.getString(2);
-        String status = resultSet.getString(3);
-        String createAt = resultSet.getString(4);
-        String updateAt = resultSet.getString(5);
+    public Task mapRow(final ResultSet resultSet, final int i) throws SQLException {
+        String id = resultSet.getString("id");
+        String name = resultSet.getString("name");
+        String status = resultSet.getString("status");
+        String createAt = resultSet.getString("createAt");
+        String updateAt = resultSet.getString("updateAt");
         return new Task(id, name, status, createAt, updateAt);
     }
 }

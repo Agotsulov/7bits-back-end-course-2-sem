@@ -4,7 +4,9 @@ import it.sevenbits.core.model.Task;
 
 import java.util.UUID;
 
-public class TaskFactory {
+public final class TaskFactory {
+
+    private TaskFactory() {}
 
     public static Task createTaskByText(final String text) {
         String id = UUID.randomUUID().toString();

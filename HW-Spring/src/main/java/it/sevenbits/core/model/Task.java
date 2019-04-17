@@ -3,9 +3,6 @@ package it.sevenbits.core.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 import java.util.UUID;
 
 public class Task {
@@ -43,7 +40,7 @@ public class Task {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -55,7 +52,7 @@ public class Task {
         return updateAt;
     }
 
-    public void setUpdateAt(String updateAt) {
+    public void setUpdateAt(final String updateAt) {
         this.updateAt = updateAt;
     }
 }

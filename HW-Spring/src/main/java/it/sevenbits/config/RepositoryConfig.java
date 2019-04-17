@@ -10,8 +10,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 @Configuration
 public class RepositoryConfig {
     @Bean
-    public TasksRepository tasksRepository(
-            @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
+    public TasksRepository tasksRepository(final @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
         return new DatabaseTasksRepository(jdbcOperations);
     }
 }
