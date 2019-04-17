@@ -3,11 +3,18 @@ package it.sevenbits.web.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ *
+ */
 public class SignUpRequest {
 
     private final String username;
     private final String password;
 
+    /**
+     * @param username username
+     * @param password password
+     */
     @JsonCreator
     public SignUpRequest(@JsonProperty("username") final String username,
                          @JsonProperty("password") final String password) {

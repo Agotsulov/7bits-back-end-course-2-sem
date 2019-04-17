@@ -20,7 +20,7 @@ public class CookieSignInController {
     private final SignInService loginService;
     private final JwtTokenService tokenService;
 
-    private final int thousand = 1000;
+    private final int THOUSAND = 1000;
 
     public CookieSignInController(final SignInService loginService, final JwtTokenService tokenService) {
         this.loginService = loginService;
@@ -37,7 +37,7 @@ public class CookieSignInController {
 
         Cookie cookie = new Cookie("accessToken", token);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge((int) (tokenService.getTokenExpiredIn().toMillis() / thousand));
+        cookie.setMaxAge((int) (tokenService.getTokenExpiredIn().toMillis() / THOUSAND));
         response.addCookie(cookie);
 
         return ResponseEntity.ok().body(signInResponse);

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class User {
 
     @JsonProperty("id")
@@ -20,6 +23,12 @@ public class User {
     @JsonIgnore
     private final String password;
 
+    /**
+     * @param id id
+     * @param username username
+     * @param password password
+     * @param authorities auth
+     */
     public User(final String id,
                 final String username,
                 final String password,
@@ -31,6 +40,11 @@ public class User {
 
     }
 
+    /**
+     * @param id id
+     * @param username username
+     * @param authorities auth
+     */
     @JsonCreator
     public User(final String id,
                 final String username,

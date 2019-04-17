@@ -6,12 +6,19 @@ import it.sevenbits.core.model.Task;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class ListTaskWithMetaResponse {
 
     @JsonProperty("_meta")
     private Meta meta;
     private List<Task> tasks;
 
+    /**
+     * @param meta meta
+     * @param tasks list tasks
+     */
     public ListTaskWithMetaResponse(final Meta meta, final List<Task> tasks) {
         this.meta = meta;
         this.tasks = tasks;

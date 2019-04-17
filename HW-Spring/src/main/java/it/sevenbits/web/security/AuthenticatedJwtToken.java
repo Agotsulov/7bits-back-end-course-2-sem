@@ -12,6 +12,10 @@ class AuthenticatedJwtToken extends AbstractAuthenticationToken {
 
     private final String subject;
 
+    /**
+     * @param subject subject
+     * @param authorities authorities
+     */
     AuthenticatedJwtToken(final String subject, final Collection<GrantedAuthority> authorities) {
         super(authorities);
         this.subject = subject;

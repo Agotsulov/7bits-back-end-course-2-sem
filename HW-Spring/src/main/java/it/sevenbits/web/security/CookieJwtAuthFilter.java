@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CookieJwtAuthFilter extends JwtAuthFilter {
 
+    /**
+     * @param matcher RequestMatcher
+     */
     public CookieJwtAuthFilter(final RequestMatcher matcher) {
         super(matcher);
     }

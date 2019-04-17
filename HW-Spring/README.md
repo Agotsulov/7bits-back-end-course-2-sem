@@ -1,4 +1,5 @@
 
+HOW TO START 
 
 install maven 
 

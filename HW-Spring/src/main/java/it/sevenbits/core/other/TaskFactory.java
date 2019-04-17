@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public final class TaskFactory {
 
+    private TaskFactory() {}
+
     public static Task createTaskByText(final String text) {
         String id = UUID.randomUUID().toString();
         String createAt = Helper.getCurrentTime();

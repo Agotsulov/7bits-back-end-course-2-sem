@@ -14,6 +14,10 @@ import javax.sql.DataSource;
 @Configuration
 public class TasksDatabaseConfig {
 
+
+    /**
+     * @return DataSource
+     */
     @Bean
     @FlywayDataSource
     @Qualifier("dataSource")
@@ -22,6 +26,11 @@ public class TasksDatabaseConfig {
         return DataSourceBuilder.create().build();
     }
 
+
+    /**
+     * @param tasksDataSource DataSource
+     * @return JdbcOperations
+     */
     @Bean
     @Qualifier("JdbcOperations")
     public JdbcOperations tasksJdbcOperations(final

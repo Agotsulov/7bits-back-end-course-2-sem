@@ -10,6 +10,10 @@ public class PatchUserRequest {
     private boolean enabled;
     private List<String> authorities;
 
+    /**
+     * @param enabled new enabled
+     * @param authorities authorities
+     */
     @JsonCreator
     public PatchUserRequest(@JsonProperty("enabled") final boolean enabled,
                             @JsonProperty("authorities") final List<String> authorities) {

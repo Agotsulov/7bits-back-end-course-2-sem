@@ -4,12 +4,9 @@ import it.sevenbits.core.model.Task;
 import it.sevenbits.core.other.Helper;
 import it.sevenbits.core.other.TaskFactory;
 import it.sevenbits.core.other.TaskRowMapper;
-import it.sevenbits.web.model.AddTaskRequest;
-import it.sevenbits.web.model.PatchTaskRequest;
 import org.springframework.jdbc.core.JdbcOperations;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DatabaseTasksRepository implements TasksRepository {
 

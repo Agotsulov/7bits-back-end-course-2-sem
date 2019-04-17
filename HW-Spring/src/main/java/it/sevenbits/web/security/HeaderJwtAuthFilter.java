@@ -15,6 +15,9 @@ public class HeaderJwtAuthFilter extends JwtAuthFilter {
     private static final Pattern BEARER_AUTH_PATTERN = Pattern.compile("^Bearer\\s+(.*)$");
     private static final int TOKEN_GROUP = 1;
 
+    /**
+     * @param matcher RequestMatcher
+     */
     public HeaderJwtAuthFilter(final RequestMatcher matcher) {
         super(matcher);
     }

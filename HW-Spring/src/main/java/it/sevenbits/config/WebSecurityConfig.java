@@ -21,12 +21,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+/**
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private JwtTokenService jwtTokenService;
 
+    /**
+     * @param jwtTokenService JwtTokenService
+     */
     public WebSecurityConfig(final JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
@@ -67,11 +73,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(new JwtAuthenticationProvider(jwtTokenService));
     }
 
+
+    /**
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * @param settings JwtSettings
+     * @return JsonWebTokenService
+     */
     @Bean
     public JwtTokenService jwtTokenService(final JwtSettings settings) {
         return new JsonWebTokenService(settings);

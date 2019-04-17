@@ -29,6 +29,9 @@ public class JsonWebTokenService implements JwtTokenService {
     private final JwtSettings settings;
     private final String AUTHORITIES = "authorities";
 
+    /**
+     * @param settings JwtSettings
+     */
     public JsonWebTokenService(final JwtSettings settings) {
         this.settings = settings;
     }
