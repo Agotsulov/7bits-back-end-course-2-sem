@@ -6,6 +6,9 @@ spring:
     username: aaaaa
     password: bbbbb
     driver-class-name: org.postgresql.Driver
+  profiles:
+    active: file-only-logging
+
 jwt:
   issuer: 'agotsulov@gmail.com'
   signingKey: 'talspoc120nxjsapqke1d77'
@@ -17,3 +20,11 @@ meta:
   defaultSize: 25
   minSize: 10
   maxSize: 50
+  spring:
+
+logging:
+  file:
+    max-size: 512K
+  path: logs
+  level:
+    root: INFO
