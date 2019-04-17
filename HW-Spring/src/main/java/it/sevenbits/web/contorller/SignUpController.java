@@ -1,10 +1,8 @@
 package it.sevenbits.web.contorller;
 
-import it.sevenbits.core.model.User;
 import it.sevenbits.core.service.signup.SignUpService;
 import it.sevenbits.web.model.SignUpRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +22,7 @@ public class SignUpController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity create(@RequestBody SignUpRequest signUp) {
+    public ResponseEntity create(@RequestBody final SignUpRequest signUp) {
         if (signUpService.signUp(signUp) == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

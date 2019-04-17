@@ -13,13 +13,13 @@ import org.springframework.jdbc.core.JdbcOperations;
 public class RepositoryConfig {
     @Bean
     public TasksRepository tasksRepository(
-            @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
+            @Qualifier("JdbcOperations") final JdbcOperations jdbcOperations) {
         return new DatabaseTasksRepository(jdbcOperations);
     }
 
     @Bean
     public UsersRepository usersRepository(
-            @Qualifier("JdbcOperations") JdbcOperations jdbcOperations) {
+            @Qualifier("JdbcOperations") final JdbcOperations jdbcOperations) {
         return new DatabaseUsersRepository(jdbcOperations);
     }
 }

@@ -15,12 +15,12 @@ public class HeaderJwtAuthFilter extends JwtAuthFilter {
     private static final Pattern BEARER_AUTH_PATTERN = Pattern.compile("^Bearer\\s+(.*)$");
     private static final int TOKEN_GROUP = 1;
 
-    public HeaderJwtAuthFilter(RequestMatcher matcher) {
+    public HeaderJwtAuthFilter(final RequestMatcher matcher) {
         super(matcher);
     }
 
     @Override
-    protected String takeToken(HttpServletRequest request) throws AuthenticationException {
+    protected String takeToken(final HttpServletRequest request) throws AuthenticationException {
         String authHeader = request.getHeader("Authorization");
         Matcher m = BEARER_AUTH_PATTERN.matcher(authHeader);
         if (m.matches()) {

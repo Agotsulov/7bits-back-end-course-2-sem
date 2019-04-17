@@ -1,4 +1,4 @@
-package it.sevenbits;
+package it.sevenbits.web.controller;
 
 import it.sevenbits.core.model.Task;
 import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;

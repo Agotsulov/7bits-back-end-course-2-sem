@@ -1,4 +1,4 @@
-package it.sevenbits;
+package it.sevenbits.core.model;
 
 import it.sevenbits.core.model.Task;
 import it.sevenbits.core.other.Helper;

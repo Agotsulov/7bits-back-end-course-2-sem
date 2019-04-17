@@ -22,7 +22,8 @@ public class CorsConfig {
     @Value("${corsHeaders.allowMethods:GET,POST,OPTIONS}")
     private String allowMethods;
 
-    @Value("${corsHeaders.allowHeaders:Authorization,Origin,Accept,Key,DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type}")
+    @Value("${corsHeaders.allowHeaders:Authorization,Origin,Accept,Key,DNT,Keep-Alive,User-Agent," +
+            "X-Requested-With,If-Modified-Since,Cache-Control,Content-Type}")
     private String allowHeaders;
 
     private Pattern delimiter = Pattern.compile("[,\\s]+");

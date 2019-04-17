@@ -9,7 +9,8 @@ public class SignInRequest {
     private final String password;
 
     @JsonCreator
-    public SignInRequest(@JsonProperty("username") String username, @JsonProperty("password")String password) {
+    public SignInRequest(@JsonProperty("username") final String username,
+                         @JsonProperty("password") final String password) {
         this.username = username;
         this.password = password;
     }

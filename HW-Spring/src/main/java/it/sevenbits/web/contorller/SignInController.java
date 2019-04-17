@@ -19,7 +19,7 @@ public class SignInController {
 
     @PostMapping
     @ResponseBody
-    public User create(@RequestBody SignInRequest login) {
+    public User create(@RequestBody final SignInRequest login) {
         return signInService.login(login);
     }
 

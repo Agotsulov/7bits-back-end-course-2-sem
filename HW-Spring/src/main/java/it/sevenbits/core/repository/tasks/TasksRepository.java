@@ -2,10 +2,8 @@ package it.sevenbits.core.repository.tasks;
 
 import it.sevenbits.core.model.Task;
 import it.sevenbits.web.model.AddTaskRequest;
-import it.sevenbits.web.model.PatchTaskRequest;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface TasksRepository {
 

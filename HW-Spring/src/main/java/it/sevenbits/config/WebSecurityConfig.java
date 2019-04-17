@@ -1,6 +1,13 @@
 package it.sevenbits.config;
 
-import it.sevenbits.web.security.*;
+
+import it.sevenbits.web.security.JwtTokenService;
+import it.sevenbits.web.security.HeaderJwtAuthFilter;
+import it.sevenbits.web.security.JwtAuthFilter;
+import it.sevenbits.web.security.JsonWebTokenService;
+import it.sevenbits.web.security.JwtAuthenticationProvider;
+import it.sevenbits.web.security.JwtSettings;
+import it.sevenbits.web.security.JwtTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,9 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RequestMatcher loginPageMatcher = new AntPathRequestMatcher("/signin");
         RequestMatcher notLoginPageMatcher = new NegatedRequestMatcher(loginPageMatcher);
 
-//        JwtAuthFilter authFilter = new HeaderJwtAuthFilter(notLoginPageMatcher);
-        JwtAuthFilter authFilter = new CookieJwtAuthFilter(notLoginPageMatcher);
-//         you can add your own handlers on success and fail
+        JwtAuthFilter authFilter = new HeaderJwtAuthFilter(notLoginPageMatcher);
+
+        // JwtAuthFilter authFilter = new CookieJwtAuthFilter(notLoginPageMatcher);
+        // you can add your own handlers on success and fail
+
         http.addFilterBefore(authFilter, FilterSecurityInterceptor.class);
 
         http

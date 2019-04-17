@@ -8,7 +8,7 @@ public class SignInResponse {
     private final String token;
 
     @JsonCreator
-    public SignInResponse(@JsonProperty("token") String token) {
+    public SignInResponse(@JsonProperty("token") final  String token) {
         this.token = token;
     }
 

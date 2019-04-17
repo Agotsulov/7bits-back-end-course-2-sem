@@ -4,9 +4,12 @@ import it.sevenbits.core.model.User;
 import it.sevenbits.web.model.PatchUserRequest;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class DatabaseUsersRepository implements UsersRepository {
 

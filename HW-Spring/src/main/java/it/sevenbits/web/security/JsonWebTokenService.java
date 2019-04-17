@@ -34,7 +34,7 @@ public class JsonWebTokenService implements JwtTokenService {
     }
 
     @Override
-    public String createToken(User user) {
+    public String createToken(final User user) {
         logger.debug("Generating token for {}", user.getUsername());
 
         Instant now = Instant.now();
@@ -64,7 +64,7 @@ public class JsonWebTokenService implements JwtTokenService {
     }
 
     @Override
-    public Authentication parseToken(String token) {
+    public Authentication parseToken(final String token) {
         Jws<Claims> claims = Jwts.parser().setSigningKey(settings.getTokenSigningKey()).parseClaimsJws(token);
 
         String subject = claims.getBody().getSubject();

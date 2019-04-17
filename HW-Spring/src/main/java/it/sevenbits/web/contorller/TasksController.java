@@ -7,10 +7,16 @@ import it.sevenbits.web.model.ListTaskWithMetaResponse;
 import it.sevenbits.web.model.PatchTaskRequest;
 import it.sevenbits.core.model.Task;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -25,16 +31,15 @@ public class TasksController {
     @Value("${meta.defaultPage}")
     private int defaultPage = 1;
     @Value("${meta.defaultSize}")
-    private int defaultSize = 25;
+    private int defaultSize = 1;
     @Value("${meta.minSize}")
-    private int defaultMinSize = 10;
+    private int defaultMinSize = 1;
     @Value("${meta.maxSize}")
-    private int defaultMaxSize = 50;
-    //Так как в тесте объект мокается, то деволнтые = 0. И там деленее на 0. Нужно ли получать 0 задании со старницы?
+    private int defaultMaxSize = 1;
 
     private final TasksRepository tasksRepository;
 
-    public TasksController(final TasksRepository tasksRepository){
+    public TasksController(final TasksRepository tasksRepository) {
         this.tasksRepository = tasksRepository;
     }
 
@@ -63,7 +68,6 @@ public class TasksController {
             size = sizeQuery;
         }
         int total = tasksRepository.size();
-        //В api не понятно нажно ли тут проверки на то что next и prev дают не существующие странницы. (я бы null давал тогда)
         Meta meta = new Meta(total, page, size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page + 1) + "&size=" + size,
                 "/tasks?status=" + status + "&order=" + order + "&&page=" + (page - 1) + "&size=" + size,
@@ -91,15 +95,12 @@ public class TasksController {
 
         Task task = tasksRepository.create(newTask);
 
-        /*
-        URI location = UriComponentsBuilder.fromPath("/users/")
-                    .path(String.valueOf(task.getId().toString()))
-                    .build().toUri();
-        */
-        return ResponseEntity.ok().body(task);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Location", "/tasks/" + task.getId().toString());
+        return ResponseEntity.ok().headers(responseHeaders).build();
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = "{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "{id}")
     @ResponseBody
     public ResponseEntity<Task> getTask(@PathVariable("id") final String id) {
         UUID uuid = UUID.fromString(id);
@@ -110,7 +111,7 @@ public class TasksController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(task);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH,value = "{id}")
+    @RequestMapping(method = RequestMethod.PATCH, value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> patchTask(@PathVariable("id") final String id,
                             @RequestBody final PatchTaskRequest patchTaskRequest) {
@@ -125,7 +126,7 @@ public class TasksController {
 
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,value = "{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteTask(@PathVariable("id") final String id) {
         Task task = tasksRepository.remove(id);

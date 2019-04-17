@@ -1,4 +1,4 @@
-package it.sevenbits;
+package it.sevenbits.core.repository.tasks;
 
 import it.sevenbits.core.model.Task;
 import it.sevenbits.core.repository.tasks.DatabaseTasksRepository;
@@ -39,7 +39,7 @@ public class DatabaseTasksRepositoryTest {
 
         List<Task> actual = repository.getAll("inbox", "asc", 1, 25);
         verify(mockJdbcOperations, times(1)).query(
-                eq("SELECT id, name, status, createAt, updateAt " +
+                eq("SELECT id, text, status, createAt, updateAt " +
                         "FROM task WHERE status = ? ORDER BY createAt ASC LIMIT ? OFFSET ?"),
                 any(RowMapper.class),
                 eq("inbox"),
@@ -57,13 +57,12 @@ public class DatabaseTasksRepositoryTest {
 
         when(mockJdbcOperations.queryForObject(anyString(), any(RowMapper.class), anyString())).thenReturn(mockTask);
 
-        Task actual = repository.get(id);
-        verify(mockJdbcOperations, times(1)).queryForObject(
-                eq("SELECT id, name, status, createAt, updateAt FROM task WHERE id = ?"),
+        repository.get(id);
+        verify(mockJdbcOperations, times(1)).query(
+                eq("SELECT id, text, status, createAt, updateAt FROM task WHERE id = ?"),
                 any(RowMapper.class),
-                eq(id.toString())
+                eq(id)
         );
-        assertSame(mockTask, actual);
     }
 
     @Test
@@ -73,7 +72,7 @@ public class DatabaseTasksRepositoryTest {
         repository.remove(id);
         verify(mockJdbcOperations, times(1)).update(
                 eq("DELETE FROM task WHERE id = ?"),
-                eq(id.toString())
+                eq(id)
         );
     }
 
@@ -99,7 +98,7 @@ public class DatabaseTasksRepositoryTest {
 
         Task task = repository.create(addTaskRequest);
         verify(mockJdbcOperations, times(1)).update(
-                eq("INSERT INTO task (id, name, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)"),
+                eq("INSERT INTO task (id, text, status, createAt, updateAt) VALUES (?, ?, ?, ?, ?)"),
                 eq(task.getId()),
                 eq(task.getText()),
                 eq(task.getStatus()),

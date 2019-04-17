@@ -11,7 +11,13 @@ public class Meta {
     private String first;
     private String last;
 
-    public Meta(int total, int page, int size, String next, String prev, String first, String last) {
+    public Meta(final int total,
+                final int page,
+                final int size,
+                final String next,
+                final String prev,
+                final String first,
+                final String last) {
         this.total = total;
         this.page = page;
         this.size = size;
