@@ -17,6 +17,11 @@ public class JwtSettings {
     private String tokenSigningKey;
     private int aTokenDuration;
 
+    /**
+     * @param tokenIssuer @Value("${jwt.issuer}")
+     * @param tokenSigningKey @Value("${jwt.signingKey}")
+     * @param aTokenDuration @Value("${jwt.aTokenDuration}")
+     */
     public JwtSettings(@Value("${jwt.issuer}") final String tokenIssuer,
                        @Value("${jwt.signingKey}") final String tokenSigningKey,
                        @Value("${jwt.aTokenDuration}") final int aTokenDuration) {

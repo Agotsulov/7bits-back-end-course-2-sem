@@ -15,6 +15,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtTokenService tokenService;
 
+    /**
+     * @param tokenService JwtTokenService
+     */
     public JwtAuthenticationProvider(final JwtTokenService tokenService) {
         this.tokenService = tokenService;
     }

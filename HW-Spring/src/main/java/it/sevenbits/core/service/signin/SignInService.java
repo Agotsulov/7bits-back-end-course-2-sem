@@ -6,27 +6,37 @@ import it.sevenbits.web.model.SignInRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * Service for sign in users in repository
+ */
 @Service
 public class SignInService {
 
     private final UsersRepository users;
     private final PasswordEncoder passwordEncoder;
 
-    public SignInService(final UsersRepository users, final PasswordEncoder passwordEncoder) {
-        this.users = users;
+    /**
+     * @param usersRepository UsersRepository
+     * @param passwordEncoder PasswordEncoder
+     */
+    public SignInService(final UsersRepository usersRepository, final PasswordEncoder passwordEncoder) {
+        this.users = usersRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User login(final SignInRequest login) {
-        User user = users.findByUserName(login.getUsername());
+    /**
+     * @param signInRequest SignInRequest
+     * @return user
+     */
+    public User signIn(final SignInRequest signInRequest) {
+        User user = users.findByUserName(signInRequest.getUsername());
 
         if (user == null) {
-            throw new LoginFailedException("User '" + login.getUsername() + "' not found");
+            throw new SignInFailedException("User '" + signInRequest.getUsername() + "' not found");
         }
 
-        if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            throw new LoginFailedException("Wrong password");
+        if (!passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
+            throw new SignInFailedException("Wrong password");
         }
         return new User(user.getId(), user.getUsername(), user.getAuthorities());
     }

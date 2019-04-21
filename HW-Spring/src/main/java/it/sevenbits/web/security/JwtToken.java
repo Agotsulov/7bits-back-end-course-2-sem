@@ -9,6 +9,9 @@ public class JwtToken extends AbstractAuthenticationToken {
 
     private final String token;
 
+    /**
+     * @param token token
+     */
     public JwtToken(final String token) {
         super(null);
         this.token = token;

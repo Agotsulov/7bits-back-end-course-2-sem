@@ -5,7 +5,7 @@ import it.sevenbits.core.model.Task;
 import java.util.List;
 
 /**
- *
+ * Tasks repository
  */
 public interface TasksRepository {
 

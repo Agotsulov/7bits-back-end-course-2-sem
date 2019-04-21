@@ -5,6 +5,9 @@ import org.springframework.security.core.Authentication;
 
 import java.time.Duration;
 
+/**
+ *
+ */
 public interface JwtTokenService {
     /**
      * Getter for token duration

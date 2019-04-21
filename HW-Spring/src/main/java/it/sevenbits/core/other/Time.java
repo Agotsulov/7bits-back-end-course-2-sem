@@ -2,9 +2,12 @@ package it.sevenbits.core.other;
 
 import java.time.Instant;
 
-public final class Helper {
+/**
+ * Class for get current time
+ */
+public final class Time {
 
-    private Helper() {}
+    private Time() {}
 
     public static String getCurrentTime() {
         //SimpleDateFormat date = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");

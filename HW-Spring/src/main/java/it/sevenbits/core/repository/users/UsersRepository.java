@@ -5,15 +5,37 @@ import it.sevenbits.web.model.PatchUserRequest;
 
 import java.util.List;
 
+/**
+ * Users repository
+ */
 public interface UsersRepository {
 
-    void create(User user);
+    /**
+     * Add new user
+     * @param user user
+     */
+    void add(User user);
 
+    /**
+     * @param username username
+     * @return first user with this username
+     */
     User findByUserName(String username);
 
+    /**
+     * @return All users
+     */
     List<User> findAll();
 
+    /**
+     * @param id user id
+     * @return user with this id
+     */
     User findById(String id);
 
+    /**
+     * @param id user id
+     * @param patchUserRequest PatchUserRequest
+     */
     void update(String id, PatchUserRequest patchUserRequest);
 }

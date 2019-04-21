@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
+/**
+ * Configuration for TasksDatabase
+ */
 @Configuration
 public class TasksDatabaseConfig {
 

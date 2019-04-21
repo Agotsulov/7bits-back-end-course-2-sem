@@ -1,18 +1,24 @@
 package it.sevenbits.core.repository.tasks;
 
 import it.sevenbits.core.model.Task;
-import it.sevenbits.core.other.Helper;
+import it.sevenbits.core.other.Time;
 import it.sevenbits.core.other.TaskFactory;
 import it.sevenbits.core.other.TaskRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class DatabaseTasksRepository implements TasksRepository {
 
     private JdbcOperations jdbcOperations;
     private final TaskRowMapper taskRowMapper = new TaskRowMapper();
 
+    /**
+     * @param jdbcOperations JdbcOperations
+     */
     public DatabaseTasksRepository(final JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
@@ -77,7 +83,7 @@ public class DatabaseTasksRepository implements TasksRepository {
 
     @Override
     public void update(final Task task, final String owner) {
-        String updateAt = Helper.getCurrentTime();
+        String updateAt = Time.getCurrentTime();
         jdbcOperations.update("UPDATE task SET text = ?, status = ?, updateAt = ? " +
                         "WHERE id = ? AND owner = ?",
                 task.getText(),

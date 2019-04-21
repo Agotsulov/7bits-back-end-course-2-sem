@@ -1,7 +1,6 @@
 package it.sevenbits.core.model;
 
-import it.sevenbits.core.model.Task;
-import it.sevenbits.core.other.Helper;
+import it.sevenbits.core.other.Time;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -15,7 +14,7 @@ public class TaskTest {
         String id = UUID.randomUUID().toString();
         String text = "TEST";
         String status = "inbox";
-        String createAt = Helper.getCurrentTime();
+        String createAt = Time.getCurrentTime();
         Task task = new Task(id, text, status, createAt, createAt);
 
         assertEquals(id, task.getId().toString());

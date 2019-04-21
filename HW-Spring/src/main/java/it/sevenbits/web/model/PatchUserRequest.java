@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * Request to patch user
+ */
 public class PatchUserRequest {
 
     private boolean enabled;

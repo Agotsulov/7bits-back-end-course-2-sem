@@ -21,10 +21,18 @@ public class WhoamiController {
 
     private final UsersRepository usersRepository;
 
+
+    /**
+     * @param usersRepository UsersRepository
+     */
     public WhoamiController(final UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
+    /**
+     * GET
+     * @return 200 current user data
+     */
     @GetMapping
     @ResponseBody
     public ResponseEntity<User> get() {

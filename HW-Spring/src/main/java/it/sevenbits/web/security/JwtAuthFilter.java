@@ -22,8 +22,11 @@ import java.util.Collections;
  */
 public abstract class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * @param matcher RequestMatcher
+     */
     public JwtAuthFilter(final RequestMatcher matcher) {
         super(matcher);
     }
@@ -41,6 +44,11 @@ public abstract class JwtAuthFilter extends AbstractAuthenticationProcessingFilt
         return new JwtToken(token);
     }
 
+    /**
+     * @param request HttpServletRequest
+     * @return token
+     * @throws AuthenticationException ex
+     */
     protected abstract String takeToken(HttpServletRequest request) throws AuthenticationException;
 
     private Authentication anonymousToken() {

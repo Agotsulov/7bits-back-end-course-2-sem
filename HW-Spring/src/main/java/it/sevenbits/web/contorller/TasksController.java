@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.UUID;
 
+/**
+ * Controller for operations with tasks
+ */
 @Controller
 @RequestMapping("/tasks")
 public class TasksController {
@@ -45,6 +47,10 @@ public class TasksController {
     private final UsersRepository usersRepository;
     private final TasksRepository tasksRepository;
 
+    /**
+     * @param tasksRepository TasksRepository
+     * @param usersRepository UsersRepository
+     */
     public TasksController(final TasksRepository tasksRepository,
                            final UsersRepository usersRepository) {
         this.tasksRepository = tasksRepository;
@@ -68,6 +74,21 @@ public class TasksController {
         return user.getId();
     }
 
+    /**
+     * @param statusQuery Status values that need to be considered for filter. If empty return tasks with default status (inbox)
+     *                    Available values : inbox, done
+     *                    Default value : inbox
+     * @param orderQuery Sorting order by creation date
+     *                   Available values : desc, asc
+     *                   Default value : desc
+     * @param pageQuery Pagination page number
+     *                  Default value : 1
+     * @param sizeQuery Pagination page size minimum: 10 maximum: 50
+     *                  Default value : 25
+     * @return all tasks from server
+     * 200 - All tasks returned
+     * 403 - User does not have access to the resource
+     */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ListTaskWithMetaResponse> all(
@@ -113,9 +134,16 @@ public class TasksController {
                 .body(listTaskWithMetaResponse);
     }
 
+    /**
+     * @param newTask AddTaskRequest
+     * @return 204 - Successful operation
+     * 400 - Validation exception
+     * 403 - User does not have access to the resource
+     * 404 - User not found
+     */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Task> create(@RequestBody final AddTaskRequest newTask) {
+    public ResponseEntity create(@RequestBody final AddTaskRequest newTask) {
         if (newTask == null ||
                 newTask.getText() == null ||
                 "".equals(newTask.getText())) {
@@ -126,9 +154,14 @@ public class TasksController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", "/tasks/" + task.getId().toString());
-        return ResponseEntity.ok().headers(responseHeaders).build();
+        return ResponseEntity.noContent().headers(responseHeaders).build();
     }
 
+    /**
+     * Find task by ID
+     * @param id task ID
+     * @return task by ID
+     */
     @RequestMapping(method = RequestMethod.GET, value = "{id}")
     @ResponseBody
     public ResponseEntity<Task> getTask(@PathVariable("id") final String id) {
@@ -139,6 +172,15 @@ public class TasksController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(task);
     }
 
+    /**
+     * Update an existing task
+     * @param id task ID
+     * @param patchTaskRequest PatchTaskRequest
+     * @return 204 - Successful operation
+     * 400 - Validation exception
+     * 403 - User does not have access to the resource
+     * 404 - User not found
+     */
     @RequestMapping(method = RequestMethod.PATCH, value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> patchTask(@PathVariable("id") final String id,
@@ -154,6 +196,13 @@ public class TasksController {
 
     }
 
+    /**
+     * Delete task
+     * @param id task ID
+     * @return 200 - Successful operation
+     * 403 - User does not have access to the resource
+     * 404 - User not found
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteTask(@PathVariable("id") final String id) {

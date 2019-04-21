@@ -10,6 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.regex.Pattern;
 
 
+/**
+ * Configuratoin cors
+ */
 @Configuration
 public class CorsConfig {
 
@@ -28,6 +31,9 @@ public class CorsConfig {
 
     private Pattern delimiter = Pattern.compile("[,\\s]+");
 
+    /**
+     * @return WebMvcConfigurer
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {

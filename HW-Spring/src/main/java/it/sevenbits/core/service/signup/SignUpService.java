@@ -10,31 +10,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service for sign up users
+ */
 @Service
 public class SignUpService {
 
-    private final UsersRepository users;
+    private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SignUpService(final UsersRepository users, final PasswordEncoder passwordEncoder) {
-        this.users = users;
+    /**
+     * @param usersRepository UsersRepository
+     * @param passwordEncoder PasswordEncoder
+     */
+    public SignUpService(final UsersRepository usersRepository, final PasswordEncoder passwordEncoder) {
+        this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signUp(final SignUpRequest login) {
+    /**
+     * @param signUpRequest SignUpRequest
+     * @return user
+     */
+    public User signUp(final SignUpRequest signUpRequest) {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 
-        User checkUsername = users.findByUserName(login.getUsername());
+        User checkUsername = usersRepository.findByUserName(signUpRequest.getUsername());
         if (checkUsername != null) {
             return null;
         }
 
         User user = new User(UUID.randomUUID().toString(),
-                login.getUsername(),
-                passwordEncoder.encode(login.getPassword()), authorities);
+                signUpRequest.getUsername(),
+                passwordEncoder.encode(signUpRequest.getPassword()), authorities);
 
-        users.create(user);
+        usersRepository.add(user);
 
         return user;
     }

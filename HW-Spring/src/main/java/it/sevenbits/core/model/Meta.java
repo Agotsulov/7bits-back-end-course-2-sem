@@ -1,5 +1,8 @@
 package it.sevenbits.core.model;
 
+/**
+ * Meta model
+ */
 public class Meta {
 
     private int total;
@@ -11,6 +14,15 @@ public class Meta {
     private String first;
     private String last;
 
+    /**
+     * @param total count of all tasks
+     * @param page current page
+     * @param size current tasks on page
+     * @param next url for next page
+     * @param prev url for prev page
+     * @param first url for first page
+     * @param last url for last page
+     */
     public Meta(final int total,
                 final int page,
                 final int size,

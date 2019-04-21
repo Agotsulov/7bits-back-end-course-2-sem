@@ -10,16 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ *
+ */
 public class DatabaseUsersRepository implements UsersRepository {
 
     private final JdbcOperations jdbcOperations;
 
-    private final String ID = "id";
-    private final String AUTHORITY = "authority";
-    private final String USERNAME = "username";
-    private final String PASSWORD = "password";
+    private static final String ID = "id";
+    private static final String AUTHORITY = "authority";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
 
+    /**
+     * @param jdbcOperations JdbcOperations
+     */
     public DatabaseUsersRepository(final JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
@@ -38,6 +43,10 @@ public class DatabaseUsersRepository implements UsersRepository {
         return authorities;
     }
 
+    /**
+     * @param username username
+     * @return user or null if not found
+     */
     public User findByUserName(final String username) {
         Map<String, Object> rawUser;
 
@@ -59,6 +68,10 @@ public class DatabaseUsersRepository implements UsersRepository {
         return new User(id, username, password, authorities);
     }
 
+    /**
+     * @param id user id
+     * @return user or null if not found
+     */
     public User findById(final String id) {
         Map<String, Object> rawUser;
 
@@ -80,6 +93,9 @@ public class DatabaseUsersRepository implements UsersRepository {
         return new User(id, username, password, authorities);
     }
 
+    /**
+     * @return list of all users
+     */
     public List<User> findAll() {
         HashMap<String, User> users = new HashMap<>();
 
@@ -100,7 +116,7 @@ public class DatabaseUsersRepository implements UsersRepository {
     }
 
     @Override
-    public void create(final User user) {
+    public void add(final User user) {
         jdbcOperations.update(
                 "INSERT INTO users (id, username, password, enabled) VALUES (?, ?, ?, true)",
                 user.getId(),
