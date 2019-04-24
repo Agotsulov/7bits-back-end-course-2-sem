@@ -34,9 +34,9 @@ public class DatabaseTasksRepositoryTest {
         when(mockJdbcOperations.query(anyString(),
                 any(RowMapper.class),
                 eq("inbox"),
+                eq("testUser"),
                 eq(25),
-                eq(0),
-                eq("testUser"))).thenReturn(mockTasks);
+                eq(0))).thenReturn(mockTasks);
 
         List<Task> actual = repository.getAll(
                 "inbox", "asc", 1, 25, "testUser");
@@ -45,9 +45,9 @@ public class DatabaseTasksRepositoryTest {
                         "FROM task WHERE status = ? AND owner = ? ORDER BY createAt ASC LIMIT ? OFFSET ?"),
                 any(RowMapper.class),
                 eq("inbox"),
+                eq("testUser"),
                 eq(25),
-                eq(0),
-                eq("testUser")
+                eq(0)
         );
         assertSame(mockTasks, actual);
     }
@@ -106,7 +106,7 @@ public class DatabaseTasksRepositoryTest {
 
         Task task = repository.create(addTaskRequest.getText(), "testUser");
         verify(mockJdbcOperations, times(1)).update(
-                eq("INSERT INTO task (id, text, status, createAt, updateAt)" +
+                eq("INSERT INTO task (id, text, status, createAt, updateAt, owner)" +
                         " VALUES (?, ?, ?, ?, ?, ?)"),
                 eq(task.getId()),
                 eq(task.getText()),

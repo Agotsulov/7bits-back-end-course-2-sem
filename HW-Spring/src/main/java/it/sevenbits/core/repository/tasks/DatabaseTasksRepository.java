@@ -94,8 +94,11 @@ public class DatabaseTasksRepository implements TasksRepository {
     }
 
     @Override
-    public int size(final String owner) {
-        return jdbcOperations.queryForObject("SELECT COUNT(id) FROM task WHERE owner = ?",
-                Integer.class, owner);
+    public int size(final String owner, final String status) {
+        return jdbcOperations.queryForObject("SELECT COUNT(id) FROM task " +
+                        "WHERE owner = ? AND status = ? ",
+                Integer.class,
+                owner,
+                status);
     }
 }

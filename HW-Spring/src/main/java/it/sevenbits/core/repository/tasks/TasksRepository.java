@@ -56,9 +56,9 @@ public interface TasksRepository {
                       String owner);
 
     /**
-     * Count of tasks for this user
+     * Count of tasks for this user with status
      * @param owner user id
      * @return Count of tasks
      */
-    int size(String owner);
+    int size(String owner, String status);
 }
