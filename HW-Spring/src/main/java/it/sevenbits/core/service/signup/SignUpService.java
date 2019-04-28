@@ -33,13 +33,21 @@ public class SignUpService {
      * @return user
      */
     public User signUp(final SignUpRequest signUpRequest) {
-        
-    }
-
-    public boolean acitvate(final String id) {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 
+        User check = usersRepository.findByUserName(signUpRequest.getUsername());
+        if (check != null) {
+            return null;
+        }
+        User user = new User(UUID.randomUUID().toString(),
+                signUpRequest.getUsername(),
+                passwordEncoder.encode(signUpRequest.getPassword()), authorities);
+
+        return user;
+    }
+
+    public boolean acitvate(final String id) {
         User checkId = usersRepository.activateUserById(id);
         if (checkId == null) {
             return false;
@@ -47,7 +55,7 @@ public class SignUpService {
 
         User user = new User(UUID.randomUUID().toString(),
                 checkId.getUsername(),
-                passwordEncoder.encode(checkId.getPassword()), authorities);
+                passwordEncoder.encode(checkId.getPassword()));
 
         usersRepository.add(user);
 

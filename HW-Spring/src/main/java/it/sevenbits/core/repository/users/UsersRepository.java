@@ -45,5 +45,10 @@ public interface UsersRepository {
      */
     User activateUserById(String id);
 
+    /**
+     * @param user user
+     */
+    void addToSignUp(User user);
+
 }
 

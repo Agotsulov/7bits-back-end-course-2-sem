@@ -54,6 +54,21 @@ public class User {
         this.password = null;
         this.authorities = authorities;
     }
+
+    /**
+     * @param id id
+     * @param username username
+     * @param password password
+     */
+    @JsonCreator
+    public User(final String id,
+                final String username,
+                final String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = null;
+    }
     
     public String getId() {
         return id;
