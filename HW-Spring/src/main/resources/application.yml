@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  profiles:
+    active: DEVELOP
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/eisetasks
     username: aaaaa
@@ -17,3 +19,10 @@ meta:
   defaultSize: 25
   minSize: 10
   maxSize: 50
+
+logging:
+  path: log
+  file: eisetasks.log
+
+app:
+  name: 'eisetasks'

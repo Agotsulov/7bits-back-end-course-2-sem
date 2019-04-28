@@ -122,7 +122,7 @@ public class TasksController {
         String owner = "";
 
         try{
-            owner =getCurrentId();
+            owner = getCurrentId();
         } catch (Exception e) {
             System.out.println("AAAAAAAAAAA");
         }
