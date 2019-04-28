@@ -38,4 +38,12 @@ public interface UsersRepository {
      * @param patchUserRequest PatchUserRequest
      */
     void update(String id, PatchUserRequest patchUserRequest);
+
+    /**
+     * @param id id for activate user
+     * @return User to be added
+     */
+    User activateUserById(String id);
+
 }
+

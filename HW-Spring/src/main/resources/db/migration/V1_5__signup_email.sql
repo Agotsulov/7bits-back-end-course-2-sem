@@ -1,0 +1,9 @@
+CREATE TABLE signup (
+    id VARCHAR(256) NOT NULL PRIMARY KEY,
+    username VARCHAR(256) NOT NULL,
+    password VARCHAR(256) NOT NULL,
+    email VARCHAR(256) NOT NULL,
+    createAt VARCHAR(256) NOT NULL
+);
+
+ALTER TABLE users ADD email VARCHAR(256);
