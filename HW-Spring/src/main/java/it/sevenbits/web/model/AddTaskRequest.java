@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Request for add new task.
+ * Request for addUser new task.
  */
 public class AddTaskRequest {
 

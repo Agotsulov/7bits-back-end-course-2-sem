@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         JwtAuthFilter authFilter = new HeaderJwtAuthFilter(notLoginPageMatcher);
 
         // JwtAuthFilter authFilter = new CookieJwtAuthFilter(notLoginPageMatcher);
-        // you can add your own handlers on success and fail
+        // you can addUser your own handlers on success and fail
 
         http.addFilterBefore(authFilter, FilterSecurityInterceptor.class);
 

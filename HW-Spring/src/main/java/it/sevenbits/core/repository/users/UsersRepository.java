@@ -14,7 +14,7 @@ public interface UsersRepository {
      * Add new user
      * @param user user
      */
-    void add(User user);
+    void addUser(User user);
 
     /**
      * @param username username
@@ -46,9 +46,10 @@ public interface UsersRepository {
     User activateUserById(String id);
 
     /**
-     * @param user user
+     * @param userId user UUID
+     * @param requestId UUID for activate this user
      */
-    void addToSignUp(User user);
+    void addSignUpRequest(String userId, String requestId);
 
 }
 

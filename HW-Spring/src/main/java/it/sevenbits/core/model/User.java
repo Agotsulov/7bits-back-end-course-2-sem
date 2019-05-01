@@ -20,8 +20,14 @@ public class User {
     @JsonProperty("authorities")
     private final List<String> authorities;
 
+    @JsonProperty("email")
+    private final String email;
+
     @JsonIgnore
     private final String password;
+
+    @JsonIgnore
+    private final boolean enabled;
 
     /**
      * @param id id
@@ -31,13 +37,15 @@ public class User {
      */
     public User(final String id,
                 final String username,
+                final String email,
                 final String password,
                 final List<String> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-
+        this.enabled = false;
+        this.email = email;
     }
 
     /**
@@ -53,6 +61,8 @@ public class User {
         this.username = username;
         this.password = null;
         this.authorities = authorities;
+        this.enabled = false;
+        this.email = null;
     }
 
     /**
@@ -68,6 +78,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.authorities = null;
+        this.email = null;
     }
     
     public String getId() {
@@ -80,6 +91,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public List<String> getAuthorities() {

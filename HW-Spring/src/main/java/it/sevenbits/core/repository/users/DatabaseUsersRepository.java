@@ -116,12 +116,14 @@ public class DatabaseUsersRepository implements UsersRepository {
     }
 
     @Override
-    public void add(final User user) {
+    public void addUser(final User user) {
         jdbcOperations.update(
-                "INSERT INTO users (id, username, password, enabled) VALUES (?, ?, ?, true)",
+                "INSERT INTO users (id, username, email, password, enabled) VALUES (?, ?, ?, ?, ?)",
                 user.getId(),
                 user.getUsername(),
-                user.getPassword()
+                user.getPassword(),
+                user.getEmail(),
+                user.isEnabled()
         );
         jdbcOperations.update(
                 "INSERT INTO authorities (id, authority) VALUES (?, ?)",

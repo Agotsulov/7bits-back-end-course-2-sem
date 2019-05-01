@@ -29,10 +29,11 @@ public class SignUpService {
     }
 
     /**
-     * @param signUpRequest SignUpRequest
-     * @return user
+     * Add new not enable user and sign up request in repository
+     * @param signUpRequest SignUpRequest class
+     * @return UUID sign up request for enable this user or null if this user exists
      */
-    public User signUp(final SignUpRequest signUpRequest) {
+    public String signUp(final SignUpRequest signUpRequest) {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 
@@ -44,7 +45,10 @@ public class SignUpService {
                 signUpRequest.getUsername(),
                 passwordEncoder.encode(signUpRequest.getPassword()), authorities);
 
-        return user;
+        String requestId = UUID.randomUUID().toString();
+
+
+        return requestId;
     }
 
     public boolean acitvate(final String id) {
@@ -57,7 +61,7 @@ public class SignUpService {
                 checkId.getUsername(),
                 passwordEncoder.encode(checkId.getPassword()));
 
-        usersRepository.add(user);
+        usersRepository.addUser(user);
 
         return true;
     }
