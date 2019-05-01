@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/eisetasks
@@ -7,7 +7,7 @@ spring:
     password: bbbbb
     driver-class-name: org.postgresql.Driver
   profiles:
-    active: file-only-logging
+    active: console-file-logging
 
 jwt:
   issuer: 'agotsulov@gmail.com'
@@ -20,11 +20,10 @@ meta:
   defaultSize: 25
   minSize: 10
   maxSize: 50
-  spring:
 
 logging:
-  file:
-    max-size: 512K
   path: logs
-  level:
-    root: INFO
+  file: file.log
+
+app:
+  name: eisetasks

@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+    <property name="LOG_FILE"
+              value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"
+    />
+    <springProperty scope="context" name="APP_NAME" source="app.name" defaultValue="eisetasks"/>
 
     <appender name="ROLLING-FILE"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
+              class="ch.qos.logback.core.rolling.RollingFileAppender"
+    >
         <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern> <!-- defaults.xml -->
         </encoder>
         <file>${LOG_PATH}/${LOG_FILE}</file>
+
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>20MB</maxFileSize>
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}_%d{yyyy_MM_dd_HH}_%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>128MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>24</maxHistory>
         </rollingPolicy>
     </appender>
 
-    <springProfile name="console-and-file-logging">
+    <springProfile name="console-file-logging">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
         <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="CONSOLE"/> <!-- console-appender.xml -->
             <appender-ref ref="ROLLING-FILE"/>
         </root>
     </springProfile>
-    <springProfile name="file-only-logging">
+
+    <springProfile name="file-logging">
         <root level="WARN">
             <appender-ref ref="ROLLING-FILE"/>
         </root>
